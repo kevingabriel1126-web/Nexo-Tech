@@ -6,7 +6,7 @@ lang: es-AR
 
 # 1. Introducción
 
-Electro Banfield es una tienda online de electrónica (smartphones, notebooks, tablets, audio, smartwatches, TV y monitores, gaming y accesorios, con 38 productos de marcas como Samsung, Apple, Sony, LG, Logitech y JBL). Tiene dos partes:
+Electro Banfield es una tienda online de electrónica (celulares, notebooks, tablets, audio, smartwatches, TV y monitores, gaming y accesorios, con 38 productos de marcas como Samsung, Apple, Sony, LG, Logitech y JBL). Tiene dos partes:
 
 - **La tienda** que ve el cliente: catálogo con menú de categorías, buscador, filtros, carrito y confirmación de pedido. **Para comprar no hace falta crear una cuenta**; la cuenta es opcional y sirve para ver el historial de pedidos.
 - **El panel de empleados**, al que se entra con "Iniciar sesión". Según el rol de cada usuario se pueden ver informes de ventas, cambiar el estado de los pedidos, agregar stock, modificar precios, dar de alta y de baja productos, gestionar empleados y, solo para el dueño, ver las ganancias.
