@@ -1,0 +1,14 @@
+{
+  "name": "banfield-ecommerce",
+  "version": "1.0.0",
+  "description": "E-commerce de Banfield: servidor Node.js + SQL Server",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": { "mssql": "^11.0.0" },
+  "license": "UNLICENSED",
+  "private": true
+}
