@@ -11,7 +11,8 @@ FROM (VALUES
     (N'Notebook HP Laptop 15.6" Táctil', N'Laptop de alta productividad: Intel Core i5 de 13ª generación, 16 GB de RAM, SSD de 1 TB y pantalla táctil FHD de 15.6". Incluye tecla física de Copilot para asistencia IA.', N'Notebooks', N'notebook', N'HP', N'💻'),
     (N'Notebook Acer Swift Go 16 AI', N'Ultrabook premium para IA: procesador AMD Ryzen AI 9, 32 GB de RAM, SSD de 1 TB y una espectacular pantalla táctil WUXGA de 16" con tasa de refresco de 120 Hz.', N'Notebooks', N'notebook', N'Acer', N'💻'),
     (N'Smartwatch Apple Watch Ultra 3', N'Reloj de aventura extrema en titanio de 49 mm. GPS de doble frecuencia ultra preciso, funciones de conexión satelital, computadora de buceo y batería de hasta 72 horas.', N'Smartwatches', N'smartwatch', N'Apple', N'⌚'),
-    (N'Smartwatch Garmin Fenix 8 Pro Microled', N'Reloj deportivo de elite con pantalla MicroLED, caja de titanio de 51 mm y cristal de zafiro. Mapas sin conexión incorporados y conectividad LTE autónoma.', N'Smartwatches', N'smartwatch', N'Garmin', N'⌚')
+    (N'Smartwatch Garmin Fenix 8 Pro Microled', N'Reloj deportivo de elite con pantalla MicroLED, caja de titanio de 51 mm y cristal de zafiro. Mapas sin conexión incorporados y conectividad LTE autónoma.', N'Smartwatches', N'smartwatch', N'Garmin', N'⌚'),
+    (N'Asistente Virtual Amazon Echo Dot 5ª Generación', N'Parlante inteligente con Alexa: sonido mejorado con voces más nítidas y graves más potentes (parlante de 44 mm), sensor de temperatura ambiente para armar rutinas, Wi-Fi de doble banda y Bluetooth. Controla con la voz tus dispositivos compatibles del hogar inteligente y tiene botón para apagar los micrófonos.', N'Audio', N'parlante', N'Amazon', N'🔊')
 ) v (Nombre, Descripcion, Categoria, Tipo, Marca, Emoji)
 JOIN dbo.Categorias c ON c.Nombre = v.Categoria
 LEFT JOIN dbo.TiposProducto t ON t.Codigo = v.Tipo
