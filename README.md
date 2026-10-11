@@ -6,7 +6,7 @@ Tienda online de electrónica con panel de empleados. Proyecto de e-commerce hec
 - **Panel de empleados** (se entra con *Iniciar sesión*): según el rol se ven los informes de ventas y la facturación, se cambia el estado de los pedidos, se agrega stock, se modifican precios y se da de alta y de baja a productos. Las **ganancias** solo las ve el dueño.
 - **Otros:** botón de arrepentimiento, newsletter y gestión de empleados con roles.
 
-> El catálogo tiene 38 productos con sus precios, descuentos, stock y descripciones. Los datos de contacto y la sucursal son de ejemplo, y el costo de cada producto es un valor de demostración.
+> El catálogo tiene 38 productos con sus precios, descuentos, stock y descripciones, y 6 productos más que quedan dados de baja hasta cargarles precio y stock (se publican desde el panel con *Precio*, *+ Stock* y *Dar de alta*). Los datos de contacto y la sucursal son de ejemplo, y el costo de cada producto es un valor de demostración.
 
 ## Requisitos
 
@@ -15,7 +15,7 @@ Tienda online de electrónica con panel de empleados. Proyecto de e-commerce hec
 
 ## Puesta en marcha
 
-1. **Crear la base.** En SSMS ejecutá `sql/01_base_de_datos.sql` (crea la base `EcommerceBanfield`, las tablas, los datos de ejemplo y los procedimientos; **si la base ya existe, la reemplaza**). Después ejecutá `sql/02_usuario_de_la_app.sql`, cambiando antes la contraseña. Si ya tenés la base cargada y solo querés actualizar las descripciones de los productos, ejecutá `sql/03_actualizar_descripciones.sql` (no borra nada; cambiá la línea `USE` si tu base tiene otro nombre).
+1. **Crear la base.** En SSMS ejecutá `sql/01_base_de_datos.sql` (crea la base `EcommerceBanfield`, las tablas, los datos de ejemplo y los procedimientos; **si la base ya existe, la reemplaza**). Después ejecutá `sql/02_usuario_de_la_app.sql`, cambiando antes la contraseña. Si ya tenés la base cargada y solo querés actualizar las descripciones de los productos, ejecutá `sql/03_actualizar_descripciones.sql` (no borra nada; cambiá la línea `USE` si tu base tiene otro nombre). Para agregar los 6 productos nuevos a una base ya cargada, ejecutá `sql/04_agregar_productos.sql`.
 2. **Configurar.** Copiá `.env.example` como `.env` y completá los datos de conexión y `TOKEN_SECRET` (un texto largo y aleatorio).
 3. **Instalar y arrancar.**
 
@@ -49,7 +49,7 @@ Son 13 pruebas automáticas del servidor (permisos, validaciones, login, errores
 ## Estructura
 
 ```
-sql/       01_base_de_datos.sql, 02_usuario_de_la_app.sql, 03_actualizar_descripciones.sql (opcional)
+sql/       01_base_de_datos.sql, 02_usuario_de_la_app.sql, 03_actualizar_descripciones.sql y 04_agregar_productos.sql (opcionales)
 server/    index.js (HTTP y sesión), routes.js (API), auth.js, db.js
 public/    index.html (la tienda y el panel, conectados al servidor)
 demo/      electro-banfield.html (versión de demostración que funciona sola, sin servidor ni base)
