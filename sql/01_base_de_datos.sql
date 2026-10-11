@@ -227,7 +227,7 @@ JOIN (VALUES
 ) m (Rol, Permiso) ON m.Rol = r.Nombre;
 
 INSERT dbo.Categorias (Nombre) VALUES
-    (N'Smartphones'),
+    (N'Celulares'),
     (N'Notebooks'),
     (N'Tablets'),
     (N'Audio'),
@@ -237,7 +237,7 @@ INSERT dbo.Categorias (Nombre) VALUES
     (N'Accesorios y periféricos');
 
 INSERT dbo.TiposProducto (Codigo, Nombre) VALUES
-    (N'celular', N'Smartphone'),
+    (N'celular', N'Celular'),
     (N'notebook', N'Notebook'),
     (N'tablet', N'Tablet'),
     (N'smartwatch', N'Smartwatch o smartband'),
@@ -273,10 +273,10 @@ INSERT dbo.Productos (Nombre, Descripcion, IdCategoria, IdTipo, Marca, Anio,
 SELECT v.Nombre, v.Descripcion, c.IdCategoria, t.IdTipo, v.Marca, v.Anio,
        v.Neto, v.Iva, v.Descuento, v.Stock, v.Costo, v.Emoji
 FROM (VALUES
-    (1, N'Smartphone Samsung Galaxy S24 128GB', N'Smartphone con pantalla nítida, buena cámara y batería para todo el día.', N'Smartphones', N'celular', N'Samsung', NULL, 1000000.00, 21, 0, 4, 720000.00, N'📱'),
-    (2, N'Smartphone Apple iPhone 15 128GB', N'Smartphone con pantalla nítida, buena cámara y batería para todo el día.', N'Smartphones', N'celular', N'Apple', NULL, 1400000.00, 21, 0, 11, 1190000.00, N'📱'),
-    (3, N'Smartphone Xiaomi Redmi Note 13', N'Smartphone con pantalla nítida, buena cámara y batería para todo el día.', N'Smartphones', N'celular', N'Xiaomi', NULL, 400000.00, 21, 10, 18, 332000.00, N'📱'),
-    (4, N'Smartphone Motorola Edge 50', N'Smartphone con pantalla nítida, buena cámara y batería para todo el día.', N'Smartphones', N'celular', N'Motorola', NULL, 750000.00, 21, 0, 25, 607500.00, N'📱'),
+    (1, N'Smartphone Samsung Galaxy S24 128GB', N'Smartphone con pantalla nítida, buena cámara y batería para todo el día.', N'Celulares', N'celular', N'Samsung', NULL, 1000000.00, 21, 0, 4, 720000.00, N'📱'),
+    (2, N'Smartphone Apple iPhone 15 128GB', N'Smartphone con pantalla nítida, buena cámara y batería para todo el día.', N'Celulares', N'celular', N'Apple', NULL, 1400000.00, 21, 0, 11, 1190000.00, N'📱'),
+    (3, N'Smartphone Xiaomi Redmi Note 13', N'Smartphone con pantalla nítida, buena cámara y batería para todo el día.', N'Celulares', N'celular', N'Xiaomi', NULL, 400000.00, 21, 10, 18, 332000.00, N'📱'),
+    (4, N'Smartphone Motorola Edge 50', N'Smartphone con pantalla nítida, buena cámara y batería para todo el día.', N'Celulares', N'celular', N'Motorola', NULL, 750000.00, 21, 0, 25, 607500.00, N'📱'),
     (5, N'Notebook Lenovo IdeaPad 3 15"', N'Notebook para estudio, trabajo y entretenimiento.', N'Notebooks', N'notebook', N'Lenovo', NULL, 850000.00, 21, 0, 3, 671500.00, N'💻'),
     (6, N'Notebook Apple MacBook Air M2 13"', N'Notebook para estudio, trabajo y entretenimiento.', N'Notebooks', N'notebook', N'Apple', NULL, 1900000.00, 21, 0, 16, 1463000.00, N'💻'),
     (7, N'Notebook HP Pavilion 15', N'Notebook para estudio, trabajo y entretenimiento.', N'Notebooks', N'notebook', N'HP', NULL, 1100000.00, 21, 5, 23, 825000.00, N'💻'),
