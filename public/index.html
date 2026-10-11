@@ -199,7 +199,7 @@ const NAV=[
 {"label": "¡Ofertas!", "accent": true, "f": {"sale": true}}
 ];
 const KINDS={"": "Sin definir", "celular": "Celular", "notebook": "Notebook", "tablet": "Tablet", "smartwatch": "Smartwatch o smartband", "auriculares": "Auriculares", "parlante": "Parlante", "tv": "Smart TV", "monitor": "Monitor", "consola": "Consola", "joystick": "Joystick", "teclado": "Teclado", "mouse": "Mouse", "webcam": "Webcam", "cargador": "Cargador", "cable": "Cable", "funda": "Funda", "soporte": "Soporte", "powerbank": "Power bank", "hub": "Hub USB"};
-const BRANDS=["Samsung", "Apple", "Xiaomi", "Motorola", "Lenovo", "HP", "ASUS", "JBL", "Sony", "LG", "Microsoft", "Nintendo", "HyperX", "Redragon", "Logitech"];
+const BRANDS=["Samsung", "Apple", "Xiaomi", "Motorola", "Lenovo", "HP", "ASUS", "JBL", "Sony", "LG", "Microsoft", "Nintendo", "HyperX", "Redragon", "Logitech", "Acer", "Garmin"];
 const opts=(o,sel)=>Object.entries(o).map(([k,v])=>`<option value="${k}" ${sel===k?'selected':''}>${esc(v)}</option>`).join('');
 function match(p,f){return Object.entries(f||{}).every(([k,v])=>k==='sale'?(p.disc>0)===!!v:Array.isArray(v)?v.includes(p[k]):p[k]===v)}
 const hoverOK=()=>window.matchMedia('(hover:hover) and (min-width:861px)').matches;

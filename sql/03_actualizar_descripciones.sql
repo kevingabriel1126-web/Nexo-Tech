@@ -48,4 +48,13 @@ UPDATE dbo.Productos SET Descripcion = N'Funda protectora de silicona suave con 
 UPDATE dbo.Productos SET Descripcion = N'Soporte de aluminio ergonómico con 6 niveles de altura ajustables, ventilación abierta para mejor refrigeración y hasta 15 kg de carga.' WHERE Nombre = N'Soporte Notebook Aluminio';
 UPDATE dbo.Productos SET Descripcion = N'Batería portátil de 20000 mAh con dos salidas USB, carga rápida de 22,5W, indicador LED de carga y protección contra cortocircuitos.' WHERE Nombre = N'Power Bank 20000mAh';
 UPDATE dbo.Productos SET Descripcion = N'Hub con salida HDMI 4K, 3 puertos USB 3.0, lector de tarjetas SD/microSD, puerto USB-C de datos y entrada USB-C con Power Delivery de 100W.' WHERE Nombre = N'Hub USB-C 7 en 1';
+
+UPDATE dbo.Productos SET Descripcion = N'El tope de gama definitivo: pantalla Dynamic AMOLED 2X de 6.9", procesador de última generación, cámara profesional de 200 MP, 12 GB de RAM y lápiz óptico S Pen integrado.' WHERE Nombre = N'Smartphone Samsung Galaxy S26 Ultra';
+UPDATE dbo.Productos SET Descripcion = N'Innovación pura con chip A20 Pro. Pantalla Super Retina XDR, sistema avanzado de cámaras con grabación de video profesional estabilizado e integración total con IA.' WHERE Nombre = N'Smartphone Apple iPhone 18 Pro';
+
+UPDATE dbo.Productos SET Descripcion = N'Laptop de alta productividad: Intel Core i5 de 13ª generación, 16 GB de RAM, SSD de 1 TB y pantalla táctil FHD de 15.6". Incluye tecla física de Copilot para asistencia IA.' WHERE Nombre = N'Notebook HP Laptop 15.6" Táctil';
+UPDATE dbo.Productos SET Descripcion = N'Ultrabook premium para IA: procesador AMD Ryzen AI 9, 32 GB de RAM, SSD de 1 TB y una espectacular pantalla táctil WUXGA de 16" con tasa de refresco de 120 Hz.' WHERE Nombre = N'Notebook Acer Swift Go 16 AI';
+
+UPDATE dbo.Productos SET Descripcion = N'Reloj de aventura extrema en titanio de 49 mm. GPS de doble frecuencia ultra preciso, funciones de conexión satelital, computadora de buceo y batería de hasta 72 horas.' WHERE Nombre = N'Smartwatch Apple Watch Ultra 3';
+UPDATE dbo.Productos SET Descripcion = N'Reloj deportivo de elite con pantalla MicroLED, caja de titanio de 51 mm y cristal de zafiro. Mapas sin conexión incorporados y conectividad LTE autónoma.' WHERE Nombre = N'Smartwatch Garmin Fenix 8 Pro Microled';
 GO
