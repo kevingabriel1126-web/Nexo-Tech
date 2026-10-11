@@ -57,4 +57,6 @@ UPDATE dbo.Productos SET Descripcion = N'Ultrabook premium para IA: procesador A
 
 UPDATE dbo.Productos SET Descripcion = N'Reloj de aventura extrema en titanio de 49 mm. GPS de doble frecuencia ultra preciso, funciones de conexión satelital, computadora de buceo y batería de hasta 72 horas.' WHERE Nombre = N'Smartwatch Apple Watch Ultra 3';
 UPDATE dbo.Productos SET Descripcion = N'Reloj deportivo de elite con pantalla MicroLED, caja de titanio de 51 mm y cristal de zafiro. Mapas sin conexión incorporados y conectividad LTE autónoma.' WHERE Nombre = N'Smartwatch Garmin Fenix 8 Pro Microled';
+
+UPDATE dbo.Productos SET Descripcion = N'Parlante inteligente con Alexa: sonido mejorado con voces más nítidas y graves más potentes (parlante de 44 mm), sensor de temperatura ambiente para armar rutinas, Wi-Fi de doble banda y Bluetooth. Controla con la voz tus dispositivos compatibles del hogar inteligente y tiene botón para apagar los micrófonos.' WHERE Nombre = N'Asistente Virtual Amazon Echo Dot 5ª Generación';
 GO
