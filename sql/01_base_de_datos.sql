@@ -227,51 +227,39 @@ JOIN (VALUES
 ) m (Rol, Permiso) ON m.Rol = r.Nombre;
 
 INSERT dbo.Categorias (Nombre) VALUES
-    (N'Celulares'),
-    (N'Computación'),
+    (N'Smartphones'),
+    (N'Notebooks'),
+    (N'Tablets'),
     (N'Audio'),
-    (N'TV y video'),
+    (N'Smartwatches'),
+    (N'TV y monitores'),
     (N'Gaming'),
-    (N'Hogar inteligente'),
-    (N'Accesorios');
+    (N'Accesorios y periféricos');
 
 INSERT dbo.TiposProducto (Codigo, Nombre) VALUES
-    (N'celular', N'Celular'),
-    (N'tablet', N'Tablet'),
-    (N'smartwatch', N'Smartwatch'),
+    (N'celular', N'Smartphone'),
     (N'notebook', N'Notebook'),
-    (N'monitor', N'Monitor'),
-    (N'periferico', N'Teclado, mouse y periféricos'),
-    (N'almacenamiento', N'Almacenamiento (SSD, pendrive)'),
-    (N'impresora', N'Impresora'),
+    (N'tablet', N'Tablet'),
+    (N'smartwatch', N'Smartwatch o smartband'),
     (N'auriculares', N'Auriculares'),
-    (N'parlante', N'Parlantes y barras de sonido'),
-    (N'tv', N'Televisor'),
-    (N'proyector', N'Proyector'),
+    (N'parlante', N'Parlante'),
+    (N'tv', N'Smart TV'),
+    (N'monitor', N'Monitor'),
     (N'consola', N'Consola'),
     (N'joystick', N'Joystick'),
-    (N'domotica', N'Hogar inteligente'),
-    (N'camara', N'Cámara de seguridad'),
-    (N'accesorio', N'Accesorio');
+    (N'teclado', N'Teclado'),
+    (N'mouse', N'Mouse'),
+    (N'webcam', N'Webcam'),
+    (N'cargador', N'Cargador'),
+    (N'cable', N'Cable'),
+    (N'funda', N'Funda'),
+    (N'soporte', N'Soporte'),
+    (N'powerbank', N'Power bank'),
+    (N'hub', N'Hub USB');
 
-INSERT dbo.Versiones (Nombre, Orden) VALUES
-    (N'128 GB', 1),
-    (N'256 GB', 2),
-    (N'512 GB', 3),
-    (N'64 GB', 4),
-    (N'256 GB SSD', 5),
-    (N'512 GB SSD', 6),
-    (N'1 TB SSD', 7),
-    (N'500 GB', 8),
-    (N'1 TB', 9),
-    (N'2 TB', 10),
-    (N'43"', 11),
-    (N'50"', 12),
-    (N'55"', 13),
-    (N'65"', 14),
-    (N'825 GB', 15);
+-- (el catálogo actual no tiene versiones: se cargan desde el panel con el alta/edición de productos)
 
-INSERT dbo.Colores (Nombre) VALUES (N'Negro'), (N'Plata'), (N'Verde'), (N'Azul'), (N'Gris'), (N'Rosa'), (N'Blanco');
+-- (el catálogo actual no tiene colores)
 
 INSERT dbo.Parametros (Clave, Valor, Descripcion) VALUES
     (N'IVA_GENERAL',            21,     N'IVA general en %'),
@@ -285,136 +273,49 @@ INSERT dbo.Productos (Nombre, Descripcion, IdCategoria, IdTipo, Marca, Anio,
 SELECT v.Nombre, v.Descripcion, c.IdCategoria, t.IdTipo, v.Marca, v.Anio,
        v.Neto, v.Iva, v.Descuento, v.Stock, v.Costo, v.Emoji
 FROM (VALUES
-    (1, N'Smartphone Nova X12 128 GB', N'Smartphone con pantalla nítida, cámara de alta resolución y batería para todo el día.', N'Celulares', N'celular', N'Nova', N'2026', 536363.64, 21, 0, 4, 386181.82, N'📱'),
-    (2, N'Smartphone Nova X12 Pro 256 GB', N'Smartphone con pantalla nítida, cámara de alta resolución y batería para todo el día.', N'Celulares', N'celular', N'Nova', N'2026', 742975.21, 21, 0, 11, 631528.93, N'📱'),
-    (3, N'Smartphone Orbix A7 128 GB', N'Smartphone con pantalla nítida, cámara de alta resolución y batería para todo el día.', N'Celulares', N'celular', N'Orbix', N'2025', 321487.60, 21, 15, 18, 266834.71, N'📱'),
-    (4, N'Smartphone Kairo Lite 64 GB', N'Smartphone con pantalla nítida, cámara de alta resolución y batería para todo el día.', N'Celulares', N'celular', N'Kairo', N'2025', 180991.74, 21, 10, 25, 146603.31, N'📱'),
-    (5, N'Tablet Orbix Tab 10" 64 GB', N'Tablet liviana para estudiar, trabajar y mirar series.', N'Celulares', N'tablet', N'Orbix', N'2025', 247107.44, 21, 0, 3, 195214.88, N'📲'),
-    (6, N'Smartwatch Vektra Fit 2', N'Reloj inteligente con seguimiento de actividad y notificaciones.', N'Celulares', N'smartwatch', N'Vektra', N'2026', 106611.57, 21, 20, 16, 82090.91, N'⌚'),
-    (7, N'Notebook Vektra Book 15" Core i5 8 GB', N'Notebook liviana para estudio y trabajo, con arranque rápido.', N'Computación', N'notebook', N'Vektra', N'2026', 660330.58, 21, 0, 23, 495247.93, N'💻'),
-    (8, N'Notebook Vektra Book Pro 14" 16 GB', N'Notebook liviana para estudio y trabajo, con arranque rápido.', N'Computación', N'notebook', N'Vektra', N'2026', 983471.07, 21, 0, 7, 717933.88, N'💻'),
-    (9, N'Notebook Lumen Go 14" 4 GB', N'Notebook liviana para estudio y trabajo, con arranque rápido.', N'Computación', N'notebook', N'Lumen', N'2025', 379338.84, 21, 12, 14, 326231.40, N'💻'),
-    (10, N'Monitor Lumen 24" Full HD', N'Monitor con colores vivos y conexión HDMI.', N'Computación', N'monitor', N'Lumen', N'2025', 156198.35, 21, 0, 21, 131206.61, N'🖥️'),
-    (11, N'Monitor Lumen Curvo 27" 144 Hz', N'Monitor con colores vivos y conexión HDMI.', N'Computación', N'monitor', N'Lumen', N'2026', 271900.83, 21, 10, 5, 222958.68, N'🖥️'),
-    (12, N'Teclado mecánico Kairo K87', N'Periférico de conexión simple y uso cómodo.', N'Computación', N'periferico', N'Kairo', N'2025', 57024.79, 21, 0, 12, 45619.83, N'⌨️'),
-    (13, N'Mouse inalámbrico Kairo M3', N'Periférico de conexión simple y uso cómodo.', N'Computación', N'periferico', N'Kairo', N'2025', 19834.71, 21, 0, 19, 15471.07, N'🖱️'),
-    (14, N'Disco SSD Orbix', N'Almacenamiento rápido y confiable para tus archivos.', N'Computación', N'almacenamiento', N'Orbix', N'2025', 81818.18, 21, 15, 3, 62181.82, N'💾'),
-    (15, N'Pendrive Orbix USB 3.2', N'Almacenamiento rápido y confiable para tus archivos.', N'Computación', N'almacenamiento', N'Orbix', N'2025', 11983.47, 21, 0, 10, 8867.77, N'💾'),
-    (16, N'Impresora multifunción Lumen Ink', N'Impresora multifunción: imprime, copia y escanea.', N'Computación', N'impresora', N'Lumen', N'2025', 180991.74, 21, 0, 17, 130314.05, N'🖨️'),
-    (17, N'Auriculares inalámbricos Nova Buds', N'Auriculares con sonido claro y diseño cómodo.', N'Audio', N'auriculares', N'Nova', N'2026', 73553.72, 21, 10, 24, 62520.66, N'🎧'),
-    (18, N'Auriculares over-ear Vektra Studio', N'Auriculares con sonido claro y diseño cómodo.', N'Audio', N'auriculares', N'Vektra', N'2025', 123140.50, 21, 0, 8, 102206.61, N'🎧'),
-    (19, N'Parlante Bluetooth Orbix Boom', N'Sonido potente para tu casa o para llevar.', N'Audio', N'parlante', N'Orbix', N'2025', 65289.26, 21, 20, 15, 52884.30, N'🔊'),
-    (20, N'Barra de sonido Lumen 2.1', N'Sonido potente para tu casa o para llevar.', N'Audio', N'parlante', N'Lumen', N'2026', 156198.35, 21, 0, 22, 123396.69, N'🔊'),
-    (21, N'Smart TV Lumen 4K', N'Smart TV con imagen nítida y aplicaciones de streaming.', N'TV y video', N'tv', N'Lumen', N'2026', 379338.84, 21, 10, 6, 292090.91, N'📺'),
-    (22, N'Smart TV Lumen QLED 4K', N'Smart TV con imagen nítida y aplicaciones de streaming.', N'TV y video', N'tv', N'Lumen', N'2026', 619008.26, 21, 0, 13, 464256.20, N'📺'),
-    (23, N'Smart TV Orbix HD 32"', N'Smart TV con imagen nítida y aplicaciones de streaming.', N'TV y video', N'tv', N'Orbix', N'2025', 189256.20, 21, 15, 3, 138157.02, N'📺'),
-    (24, N'Proyector Vektra Beam', N'Proyector para series, juegos y reuniones.', N'TV y video', N'proyector', N'Vektra', N'2025', 247107.44, 21, 0, 4, 212512.40, N'📽️'),
-    (25, N'Consola Kairo Play', N'Consola de videojuegos con gráficos fluidos y carga rápida.', N'Gaming', N'consola', N'Kairo', N'2026', 742975.21, 21, 0, 11, 624099.17, N'🎮'),
-    (26, N'Joystick inalámbrico Kairo Pad', N'Joystick ergonómico de conexión inalámbrica.', N'Gaming', N'joystick', N'Kairo', N'2025', 65289.26, 21, 10, 18, 53537.19, N'🕹️'),
-    (27, N'Auriculares gamer Vektra Pro', N'Auriculares con sonido claro y diseño cómodo.', N'Gaming', N'auriculares', N'Vektra', N'2025', 81818.18, 21, 0, 25, 65454.55, N'🎧'),
-    (28, N'Mouse gamer Vektra RGB', N'Periférico de conexión simple y uso cómodo.', N'Gaming', N'periferico', N'Vektra', N'2026', 37190.08, 21, 0, 9, 29008.26, N'🖱️'),
-    (29, N'Lámpara inteligente Lumen Smart', N'Dispositivo para automatizar tu casa desde el celular.', N'Hogar inteligente', N'domotica', N'Lumen', N'2025', 15289.26, 21, 0, 16, 11619.83, N'💡'),
-    (30, N'Enchufe inteligente Lumen Plug', N'Dispositivo para automatizar tu casa desde el celular.', N'Hogar inteligente', N'domotica', N'Lumen', N'2025', 10661.16, 21, 0, 23, 7889.26, N'🔌'),
-    (31, N'Cámara de seguridad Kairo Eye 2K', N'Cámara de seguridad con visión nocturna y alertas en el celular.', N'Hogar inteligente', N'camara', N'Kairo', N'2026', 48760.33, 21, 0, 7, 35107.44, N'📷'),
-    (32, N'Asistente de voz Nova Home', N'Dispositivo para automatizar tu casa desde el celular.', N'Hogar inteligente', N'domotica', N'Nova', N'2026', 57024.79, 21, 15, 3, 48471.07, N'📡'),
-    (33, N'Cargador rápido Nova 65 W', N'Accesorio práctico para el día a día.', N'Accesorios', N'accesorio', N'Nova', N'2026', 23966.94, 21, 0, 21, 19892.56, N'🔌'),
-    (34, N'Cable USB-C a USB-C 2 m', N'Accesorio práctico para el día a día.', N'Accesorios', N'accesorio', N'Nova', N'2025', 7355.37, 21, 0, 5, 5957.85, N'🔗'),
-    (35, N'Funda para notebook 15"', N'Accesorio práctico para el día a día.', N'Accesorios', N'accesorio', N'Vektra', N'2025', 16446.28, 21, 0, 12, 12992.56, N'💼'),
-    (36, N'Power bank Orbix 20.000 mAh', N'Accesorio práctico para el día a día.', N'Accesorios', N'accesorio', N'Orbix', N'2026', 32231.40, 21, 10, 19, 24818.18, N'🔋'),
-    (37, N'Soporte para celular de auto', N'Accesorio práctico para el día a día.', N'Accesorios', N'accesorio', N'Kairo', N'2025', 10330.58, 21, 0, 26, 7747.93, N'🚗')
+    (1, N'Smartphone Samsung Galaxy S24 128GB', N'Smartphone con pantalla nítida, buena cámara y batería para todo el día.', N'Smartphones', N'celular', N'Samsung', NULL, 1000000.00, 21, 0, 4, 720000.00, N'📱'),
+    (2, N'Smartphone Apple iPhone 15 128GB', N'Smartphone con pantalla nítida, buena cámara y batería para todo el día.', N'Smartphones', N'celular', N'Apple', NULL, 1400000.00, 21, 0, 11, 1190000.00, N'📱'),
+    (3, N'Smartphone Xiaomi Redmi Note 13', N'Smartphone con pantalla nítida, buena cámara y batería para todo el día.', N'Smartphones', N'celular', N'Xiaomi', NULL, 400000.00, 21, 10, 18, 332000.00, N'📱'),
+    (4, N'Smartphone Motorola Edge 50', N'Smartphone con pantalla nítida, buena cámara y batería para todo el día.', N'Smartphones', N'celular', N'Motorola', NULL, 750000.00, 21, 0, 25, 607500.00, N'📱'),
+    (5, N'Notebook Lenovo IdeaPad 3 15"', N'Notebook para estudio, trabajo y entretenimiento.', N'Notebooks', N'notebook', N'Lenovo', NULL, 850000.00, 21, 0, 3, 671500.00, N'💻'),
+    (6, N'Notebook Apple MacBook Air M2 13"', N'Notebook para estudio, trabajo y entretenimiento.', N'Notebooks', N'notebook', N'Apple', NULL, 1900000.00, 21, 0, 16, 1463000.00, N'💻'),
+    (7, N'Notebook HP Pavilion 15', N'Notebook para estudio, trabajo y entretenimiento.', N'Notebooks', N'notebook', N'HP', NULL, 1100000.00, 21, 5, 23, 825000.00, N'💻'),
+    (8, N'Notebook Gamer ASUS TUF F15', N'Notebook para estudio, trabajo y entretenimiento.', N'Notebooks', N'notebook', N'ASUS', NULL, 1800000.00, 21, 0, 7, 1314000.00, N'💻'),
+    (9, N'Tablet Samsung Galaxy Tab A9', N'Tablet liviana para estudiar, trabajar y mirar series.', N'Tablets', N'tablet', N'Samsung', NULL, 350000.00, 21, 0, 14, 301000.00, N'📲'),
+    (10, N'Tablet Apple iPad 10ma Gen', N'Tablet liviana para estudiar, trabajar y mirar series.', N'Tablets', N'tablet', N'Apple', NULL, 700000.00, 21, 0, 21, 588000.00, N'📲'),
+    (11, N'Tablet Lenovo Tab M10 Plus', N'Tablet liviana para estudiar, trabajar y mirar series.', N'Tablets', N'tablet', N'Lenovo', NULL, 280000.00, 21, 15, 5, 229600.00, N'📲'),
+    (12, N'Auriculares JBL Tune 510BT', N'Auriculares con sonido claro y diseño cómodo.', N'Audio', N'auriculares', N'JBL', NULL, 90000.00, 21, 0, 12, 72000.00, N'🎧'),
+    (13, N'Auriculares Sony WH-1000XM5', N'Auriculares con sonido claro y diseño cómodo.', N'Audio', N'auriculares', N'Sony', NULL, 550000.00, 21, 0, 19, 429000.00, N'🎧'),
+    (14, N'Auriculares Apple AirPods Pro 2', N'Auriculares con sonido claro y diseño cómodo.', N'Audio', N'auriculares', N'Apple', NULL, 380000.00, 21, 0, 3, 288800.00, N'🎧'),
+    (15, N'Parlante JBL Flip 6', N'Parlante portátil con conexión Bluetooth.', N'Audio', N'parlante', N'JBL', NULL, 150000.00, 21, 10, 10, 111000.00, N'🔊'),
+    (16, N'Parlante Sony SRS-XB13', N'Parlante portátil con conexión Bluetooth.', N'Audio', N'parlante', N'Sony', NULL, 95000.00, 21, 0, 17, 68400.00, N'🔊'),
+    (17, N'Smartwatch Samsung Galaxy Watch 6', N'Reloj o pulsera inteligente con seguimiento de actividad y notificaciones.', N'Smartwatches', N'smartwatch', N'Samsung', NULL, 350000.00, 21, 0, 24, 297500.00, N'⌚'),
+    (18, N'Smartwatch Apple Watch SE', N'Reloj o pulsera inteligente con seguimiento de actividad y notificaciones.', N'Smartwatches', N'smartwatch', N'Apple', NULL, 450000.00, 21, 0, 8, 373500.00, N'⌚'),
+    (19, N'Smartband Xiaomi Mi Band 8', N'Reloj o pulsera inteligente con seguimiento de actividad y notificaciones.', N'Smartwatches', N'smartwatch', N'Xiaomi', NULL, 60000.00, 21, 0, 15, 48600.00, N'⌚'),
+    (20, N'Smart TV Samsung 55" 4K', N'Smart TV con imagen nítida y aplicaciones de streaming.', N'TV y monitores', N'tv', N'Samsung', NULL, 1100000.00, 21, 0, 22, 869000.00, N'📺'),
+    (21, N'Smart TV LG 50" 4K UHD', N'Smart TV con imagen nítida y aplicaciones de streaming.', N'TV y monitores', N'tv', N'LG', NULL, 950000.00, 21, 8, 6, 731500.00, N'📺'),
+    (22, N'Monitor LG 24" Full HD', N'Monitor con colores vivos y conexión HDMI.', N'TV y monitores', N'monitor', N'LG', NULL, 250000.00, 21, 0, 13, 187500.00, N'🖥️'),
+    (23, N'Monitor Gamer Samsung 27" 165Hz', N'Monitor con colores vivos y conexión HDMI.', N'TV y monitores', N'monitor', N'Samsung', NULL, 480000.00, 21, 0, 3, 350400.00, N'🖥️'),
+    (24, N'Consola Sony PlayStation 5 Slim', N'Consola de videojuegos con gráficos fluidos y carga rápida.', N'Gaming', N'consola', N'Sony', NULL, 1300000.00, 21, 0, 18, 1118000.00, N'🎮'),
+    (25, N'Consola Microsoft Xbox Series X', N'Consola de videojuegos con gráficos fluidos y carga rápida.', N'Gaming', N'consola', N'Microsoft', NULL, 1250000.00, 21, 0, 4, 1050000.00, N'🎮'),
+    (26, N'Consola Nintendo Switch OLED', N'Consola de videojuegos con gráficos fluidos y carga rápida.', N'Gaming', N'consola', N'Nintendo', NULL, 750000.00, 21, 0, 11, 615000.00, N'🎮'),
+    (27, N'Joystick Sony DualSense PS5', N'Joystick inalámbrico ergonómico.', N'Gaming', N'joystick', N'Sony', NULL, 130000.00, 21, 0, 20, 104000.00, N'🕹️'),
+    (28, N'Auriculares Gamer HyperX Cloud II', N'Auriculares con sonido claro y diseño cómodo.', N'Gaming', N'auriculares', N'HyperX', NULL, 180000.00, 21, 10, 5, 140400.00, N'🎧'),
+    (29, N'Teclado Mecánico Redragon Kumara', N'Teclado de uso cómodo y respuesta rápida.', N'Accesorios y periféricos', N'teclado', N'Redragon', NULL, 85000.00, 21, 0, 9, 64600.00, N'⌨️'),
+    (30, N'Mouse Logitech G502 Hero', N'Mouse de uso cómodo y buena precisión.', N'Accesorios y periféricos', N'mouse', N'Logitech', NULL, 95000.00, 21, 0, 16, 70300.00, N'🖱️'),
+    (31, N'Mouse Inalámbrico Logitech M170', N'Mouse de uso cómodo y buena precisión.', N'Accesorios y periféricos', N'mouse', N'Logitech', NULL, 25000.00, 21, 0, 23, 18000.00, N'🖱️'),
+    (32, N'Webcam Logitech C920 HD Pro', N'Webcam para videollamadas y streaming.', N'Accesorios y periféricos', N'webcam', N'Logitech', NULL, 120000.00, 21, 0, 7, 102000.00, N'📷'),
+    (33, N'Cargador Rápido 65W USB-C', N'Cargador rápido USB-C.', N'Accesorios y periféricos', N'cargador', NULL, NULL, 35000.00, 21, 0, 14, 29050.00, N'🔌'),
+    (34, N'Cable USB-C a USB-C 2m', N'Cable de carga y transferencia de datos.', N'Accesorios y periféricos', N'cable', NULL, NULL, 12000.00, 21, 0, 21, 9720.00, N'🔗'),
+    (35, N'Funda Silicona Universal', N'Funda para proteger tu dispositivo.', N'Accesorios y periféricos', N'funda', NULL, NULL, 8000.00, 21, 0, 3, 6320.00, N'🛡️'),
+    (36, N'Soporte Notebook Aluminio', N'Soporte de aluminio para trabajar más cómodo.', N'Accesorios y periféricos', N'soporte', NULL, NULL, 28000.00, 21, 0, 10, 21560.00, N'💼'),
+    (37, N'Power Bank 20000mAh', N'Batería externa de gran capacidad.', N'Accesorios y periféricos', N'powerbank', NULL, NULL, 55000.00, 21, 5, 17, 41250.00, N'🔋'),
+    (38, N'Hub USB-C 7 en 1', N'Hub para ampliar las conexiones de tu notebook.', N'Accesorios y periféricos', N'hub', NULL, NULL, 45000.00, 21, 0, 24, 32850.00, N'🧩')
 ) v (Orden, Nombre, Descripcion, Categoria, Tipo, Marca, Anio, Neto, Iva, Descuento, Stock, Costo, Emoji)
 JOIN dbo.Categorias c ON c.Nombre = v.Categoria
 LEFT JOIN dbo.TiposProducto t ON t.Codigo = v.Tipo
 ORDER BY v.Orden;
 
--- Versiones y colores de cada producto
-INSERT dbo.ProductoVersiones (IdProducto, IdVersion)
-SELECT x.IdProducto, v.IdVersion
-FROM (VALUES
-    (1, N'128 GB'),
-    (1, N'256 GB'),
-    (2, N'256 GB'),
-    (2, N'512 GB'),
-    (3, N'64 GB'),
-    (3, N'128 GB'),
-    (4, N'64 GB'),
-    (4, N'128 GB'),
-    (5, N'64 GB'),
-    (5, N'128 GB'),
-    (7, N'256 GB SSD'),
-    (7, N'512 GB SSD'),
-    (8, N'512 GB SSD'),
-    (8, N'1 TB SSD'),
-    (9, N'128 GB'),
-    (14, N'500 GB'),
-    (14, N'1 TB'),
-    (14, N'2 TB'),
-    (15, N'64 GB'),
-    (15, N'128 GB'),
-    (15, N'256 GB'),
-    (21, N'43"'),
-    (21, N'50"'),
-    (21, N'55"'),
-    (22, N'55"'),
-    (22, N'65"'),
-    (25, N'825 GB'),
-    (25, N'1 TB')
-) x (IdProducto, Version)
-JOIN dbo.Versiones v ON v.Nombre = x.Version;
-
-INSERT dbo.ProductoColores (IdProducto, IdColor)
-SELECT x.IdProducto, c.IdColor
-FROM (VALUES
-    (1, N'Negro'),
-    (1, N'Plata'),
-    (1, N'Verde'),
-    (2, N'Negro'),
-    (2, N'Plata'),
-    (3, N'Negro'),
-    (3, N'Azul'),
-    (4, N'Negro'),
-    (4, N'Azul'),
-    (5, N'Gris'),
-    (6, N'Negro'),
-    (6, N'Rosa'),
-    (7, N'Gris'),
-    (8, N'Plata'),
-    (9, N'Azul'),
-    (12, N'Negro'),
-    (12, N'Blanco'),
-    (13, N'Negro'),
-    (13, N'Blanco'),
-    (13, N'Verde'),
-    (17, N'Blanco'),
-    (17, N'Negro'),
-    (18, N'Negro'),
-    (18, N'Plata'),
-    (19, N'Negro'),
-    (19, N'Azul'),
-    (19, N'Verde'),
-    (20, N'Negro'),
-    (24, N'Blanco'),
-    (25, N'Blanco'),
-    (25, N'Negro'),
-    (26, N'Negro'),
-    (26, N'Blanco'),
-    (26, N'Azul'),
-    (27, N'Negro'),
-    (28, N'Negro'),
-    (29, N'Blanco'),
-    (30, N'Blanco'),
-    (31, N'Blanco'),
-    (32, N'Gris'),
-    (32, N'Negro'),
-    (33, N'Blanco'),
-    (33, N'Negro'),
-    (34, N'Negro'),
-    (35, N'Negro'),
-    (35, N'Gris'),
-    (36, N'Negro'),
-    (37, N'Negro')
-) x (IdProducto, Color)
-JOIN dbo.Colores c ON c.Nombre = x.Color;
 GO
 
 /* =====================================================================
@@ -956,19 +857,19 @@ GO
    así que también descuentan stock.
    ===================================================================== */
 EXEC dbo.usp_RegistrarPedido @Nombre = N'Ana Pérez',   @Email = N'ana@example.com',    @Retiro = 1,
-     @ItemsJson = N'[{"idProducto": 1, "idVersion": 1, "idColor": 1, "cantidad": 1}, {"idProducto": 33, "idColor": 7, "cantidad": 1}]';
+     @ItemsJson = N'[{"idProducto": 2, "cantidad": 1}, {"idProducto": 34, "cantidad": 2}]';
 EXEC dbo.usp_RegistrarPedido @Nombre = N'Luis Díaz',   @Email = N'luis@example.com',   @Retiro = 0,
      @Direccion = N'Calle Falsa 123, Banfield',
-     @ItemsJson = N'[{"idProducto": 7, "idVersion": 5, "idColor": 5, "cantidad": 1}]';
+     @ItemsJson = N'[{"idProducto": 6, "cantidad": 1}]';
 EXEC dbo.usp_RegistrarPedido @Nombre = N'María López', @Email = N'maria@example.com',  @Retiro = 1,
-     @ItemsJson = N'[{"idProducto": 17, "idColor": 7, "cantidad": 2}, {"idProducto": 34, "idColor": 1, "cantidad": 2}]';
+     @ItemsJson = N'[{"idProducto": 31, "cantidad": 1}, {"idProducto": 33, "cantidad": 1}]';
 EXEC dbo.usp_RegistrarPedido @Nombre = N'Pedro Ruiz',  @Email = N'pedro@example.com',  @Retiro = 0,
      @Direccion = N'Av. Hipólito Yrigoyen 8500, Banfield',
-     @ItemsJson = N'[{"idProducto": 21, "idVersion": 13, "cantidad": 1}]';
+     @ItemsJson = N'[{"idProducto": 20, "cantidad": 1}]';
 EXEC dbo.usp_RegistrarPedido @Nombre = N'Carla Gómez', @Email = N'carla@example.com',  @Retiro = 1,
-     @ItemsJson = N'[{"idProducto": 25, "idVersion": 9, "idColor": 7, "cantidad": 1}, {"idProducto": 26, "idColor": 1, "cantidad": 2}]';
+     @ItemsJson = N'[{"idProducto": 24, "cantidad": 1}, {"idProducto": 27, "cantidad": 2}]';
 EXEC dbo.usp_RegistrarPedido @Nombre = N'Julián Sosa', @Email = N'julian@example.com', @Retiro = 1,
-     @ItemsJson = N'[{"idProducto": 19, "idColor": 4, "cantidad": 1}]';
+     @ItemsJson = N'[{"idProducto": 15, "cantidad": 1}]';
 
 -- Se reparten las fechas de los ejemplos en los últimos meses y se les asignan estados.
 UPDATE dbo.Pedidos
