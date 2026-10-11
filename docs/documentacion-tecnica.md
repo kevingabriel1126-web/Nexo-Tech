@@ -6,7 +6,7 @@ lang: es-AR
 
 # 1. Introducción
 
-Electro Banfield es una tienda online de electrónica (celulares, computación, audio, TV, gaming, hogar inteligente y accesorios). Tiene dos partes:
+Electro Banfield es una tienda online de electrónica (smartphones, notebooks, tablets, audio, smartwatches, TV y monitores, gaming y accesorios, con 38 productos de marcas como Samsung, Apple, Sony, LG, Logitech y JBL). Tiene dos partes:
 
 - **La tienda** que ve el cliente: catálogo con menú de categorías, buscador, filtros, carrito y confirmación de pedido. **Para comprar no hace falta crear una cuenta**; la cuenta es opcional y sirve para ver el historial de pedidos.
 - **El panel de empleados**, al que se entra con "Iniciar sesión". Según el rol de cada usuario se pueden ver informes de ventas, cambiar el estado de los pedidos, agregar stock, modificar precios, dar de alta y de baja productos, gestionar empleados y, solo para el dueño, ver las ganancias.
@@ -60,7 +60,7 @@ Las tablas se agrupan así:
 - **Precios.** `Productos` guarda el precio neto (sin IVA), el IVA y el descuento. El precio al público y el precio final son columnas calculadas, por lo que siempre son coherentes.
 - **Historial de precios.** `DetallePedido` guarda el precio neto y el costo **al momento de la compra**. Si después cambia el precio, las ventas anteriores no se alteran.
 - **Baja de productos.** Un producto no se borra: se marca `Activo = 0`. Así se conserva el historial de ventas.
-- **Versiones y colores.** Cada producto puede tener versiones (capacidad, pulgadas) y colores. Si las tiene, el cliente debe elegir una al comprar.
+- **Versiones y colores.** Cada producto puede tener versiones (capacidad, pulgadas) y colores. Si las tiene, el cliente debe elegir una al comprar. El catálogo actual no usa versiones ni colores, pero el sistema los soporta y se cargan desde el panel.
 - **Clientes con o sin cuenta.** Todo pedido queda asociado a un cliente identificado por email. Si el cliente nunca creó una cuenta, `ClaveHash` queda en `NULL`. Si después crea una cuenta con el mismo email, conserva sus pedidos anteriores.
 - **Contraseñas.** Nunca se guardan en texto plano: se guarda `SHA2_256(sal + contraseña)` con una sal aleatoria por usuario.
 - **Parámetros del negocio.** El IVA, el monto de envío gratis, el costo de envío y el umbral de stock bajo están en la tabla `Parametros`, no en el código.
@@ -188,4 +188,4 @@ Usuarios de prueba del personal: `dueno / dueno123`, `gerente / gerente123`, `ad
 - El stock es uno por producto, no por versión o color.
 - No hay comprobante en PDF ni exportación a Excel.
 - Las cuentas de clientes no tienen recuperación de contraseña.
-- Los datos de contacto, la sucursal y las marcas del catálogo son ejemplos.
+- Los datos de contacto y la sucursal son ejemplos, y el costo de cada producto es un valor de demostración (la lista de productos trae precio, descuento y stock, pero no el costo).
