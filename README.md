@@ -6,7 +6,7 @@ Tienda online de electrónica con panel de empleados. Proyecto de e-commerce hec
 - **Panel de empleados** (se entra con *Iniciar sesión*): según el rol se ven los informes de ventas y la facturación, se cambia el estado de los pedidos, se agrega stock, se modifican precios y se da de alta y de baja a productos. Las **ganancias** solo las ve el dueño.
 - **Otros:** botón de arrepentimiento, newsletter y gestión de empleados con roles.
 
-> El catálogo tiene 38 productos con sus precios, descuentos, stock y descripciones, y 7 productos más que quedan dados de baja hasta cargarles precio y stock (se publican desde el panel con *Precio*, *+ Stock* y *Dar de alta*). Los datos de contacto y la sucursal son de ejemplo, y el costo de cada producto es un valor de demostración.
+> El catálogo tiene 38 productos con sus precios, descuentos, stock y descripciones, y 7 productos más (Galaxy S26 Ultra, iPhone 18 Pro, HP táctil, Acer Swift Go 16, Apple Watch Ultra 3, Garmin Fenix 8 Pro y Echo Dot 5). Los precios de esos 7 son de referencia y su stock es de ejemplo: se ajustan desde el panel (*Precio* y *+ Stock*). Los datos de contacto y la sucursal son de ejemplo, y el costo de cada producto es un valor de demostración.
 
 ## Requisitos
 
