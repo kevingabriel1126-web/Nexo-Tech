@@ -188,4 +188,5 @@ Usuarios de prueba del personal: `dueno / dueno123`, `gerente / gerente123`, `ad
 - El stock es uno por producto, no por versión o color.
 - No hay comprobante en PDF ni exportación a Excel.
 - Las cuentas de clientes no tienen recuperación de contraseña.
+- Los precios de los últimos 7 productos del catálogo son de referencia (basados en publicaciones de tiendas y estimaciones) y su stock es de ejemplo; hay que confirmarlos antes de vender.
 - Los datos de contacto y la sucursal son ejemplos, y el costo de cada producto es un valor de demostración (la lista de productos trae precio, descuento y stock, pero no el costo).
