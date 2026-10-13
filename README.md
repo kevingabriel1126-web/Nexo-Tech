@@ -1,4 +1,4 @@
-# Electro Banfield
+# Nexo Tech
 
 Tienda online de electrónica con panel de empleados. Proyecto de e-commerce hecho con **HTML + JavaScript**, un servidor **Node.js** y una base de datos **SQL Server**.
 
@@ -55,6 +55,7 @@ public/    index.html (la tienda y el panel, conectados al servidor)
 demo/      electro-banfield.html (versión de demostración que funciona sola, sin servidor ni base)
 test/      pruebas automáticas del servidor
 docs/      documentación técnica (Word y Markdown) y diagrama de la base de datos
+docs/marca/ logo e isologo de Nexo Tech
 ```
 
 ## Documentación

@@ -138,6 +138,6 @@ function createServer() {
 
 if (require.main === module) {
   const port = parseInt(process.env.PORT || '3000', 10);
-  createServer().listen(port, () => console.log(`Electro Banfield en http://localhost:${port}`));
+  createServer().listen(port, () => console.log(`Nexo Tech en http://localhost:${port}`));
 }
 module.exports = { createServer };
