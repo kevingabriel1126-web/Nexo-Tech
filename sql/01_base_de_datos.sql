@@ -1,5 +1,5 @@
 ﻿/* =====================================================================
-   ELECTRO BANFIELD (tienda de electrónica) - Base de datos para SQL Server
+   NEXO TECH (tienda de electrónica) - Base de datos para SQL Server
    Requiere SQL Server 2017 o superior (usa OPENJSON, STRING_AGG y CREATE OR ALTER).
 
    Cómo usarlo: abrilo en SSMS (o Azure Data Studio) y ejecutalo completo (F5).
