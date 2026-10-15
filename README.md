@@ -4,6 +4,7 @@ Tienda online de electrónica con panel de empleados. Proyecto de e-commerce hec
 
 - **Tienda:** catálogo con menú de categorías, buscador y filtros, favoritos, carrito y confirmación de pedido. **Para comprar no hace falta crear una cuenta** (la cuenta es opcional y guarda el historial de pedidos).
 - **Panel de empleados** (se entra con *Iniciar sesión*): según el rol se ven los informes de ventas y la facturación, se cambia el estado de los pedidos, se agrega stock, se modifican precios y se da de alta y de baja a productos. Las **ganancias** solo las ve el dueño.
+- **Pago simulado:** el pago pide nombre completo, DNI, email, país, ciudad, dirección, código postal, número de tarjeta, vencimiento y CVC. **No se cobra nada**: usá las tarjetas de prueba que muestra la página (`4111 1111 1111 1111` aprobada, `4000 0000 0000 0002` rechazada, `4000 0000 0000 9995` fondos insuficientes). El número de la tarjeta y el CVC no se guardan ni se envían al servidor; del pago solo se guarda la marca y los últimos 4 dígitos.
 - **Otros:** botón de arrepentimiento, newsletter y gestión de empleados con roles.
 
 > El catálogo tiene 38 productos con sus precios, descuentos, stock y descripciones, y 7 productos más (Galaxy S26 Ultra, iPhone 18 Pro, HP táctil, Acer Swift Go 16, Apple Watch Ultra 3, Garmin Fenix 8 Pro y Echo Dot 5). Los precios de esos 7 son de referencia y su stock es de ejemplo: se ajustan desde el panel (*Precio* y *+ Stock*). Los datos de contacto y la sucursal son de ejemplo, y el costo de cada producto es un valor de demostración.
@@ -51,12 +52,12 @@ Se cargan desde el panel: **Iniciar sesión** (dueño o gerente) → pestaña **
 npm test
 ```
 
-Son 13 pruebas automáticas del servidor (permisos, validaciones, login, errores y seguridad). Usan una base simulada, así que no necesitan SQL Server.
+Son 14 pruebas automáticas del servidor (permisos, validaciones, login, errores y seguridad). Usan una base simulada, así que no necesitan SQL Server.
 
 ## Estructura
 
 ```
-sql/       01_base_de_datos.sql, 02_usuario_de_la_app.sql, 03_actualizar_descripciones.sql, 04_agregar_productos.sql y 05_renombrar_smartphone_a_celular.sql (opcionales)
+sql/       01_base_de_datos.sql, 02_usuario_de_la_app.sql, 03_actualizar_descripciones.sql, 04_agregar_productos.sql y 05_renombrar_smartphone_a_celular.sql y 06_agregar_pago_simulado.sql (opcionales)
 server/    index.js (HTTP y sesión), routes.js (API), auth.js, db.js
 public/    index.html (la tienda y el panel, conectados al servidor)
 demo/      electro-banfield.html (versión de demostración que funciona sola, sin servidor ni base)
@@ -86,5 +87,5 @@ Flujo de trabajo: se crea una rama `feature/...` desde `develop`, se trabaja ah�
 ## Limitaciones conocidas
 
 - El script SQL no se probó en un SQL Server real durante el desarrollo: la primera ejecución hay que revisarla.
-- No hay pago real, emails automáticos, stock por versión ni recuperación de contraseña.
+- El pago es una simulación (no hay pasarela real), no hay emails automáticos, stock por versión ni recuperación de contraseña.
 - Para publicarlo en internet hay que usar HTTPS (por ejemplo con Nginx) y cambiar los usuarios y claves de prueba.

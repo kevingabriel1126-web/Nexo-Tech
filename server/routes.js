@@ -68,7 +68,9 @@ async function loadProducts({ all = false, withCost = false } = {}) {
 async function buildOrders(where, params) {
   const o = await query(
     `SELECT p.IdPedido AS id, CONVERT(VARCHAR(19), p.Fecha, 126) AS date, p.Estado AS estado, p.Retiro AS retiro,
-            p.DireccionEntrega AS addr, p.Subtotal AS sub, p.Descuento AS dsc, p.Envio AS envio,
+            p.DireccionEntrega AS addr, p.DireccionCliente AS dir, p.Pais AS pais, p.Ciudad AS ciudad, p.CodigoPostal AS cp,
+            p.Dni AS dni, p.PagoMarca AS pmarca, p.PagoUltimos4 AS pult,
+            p.Subtotal AS sub, p.Descuento AS dsc, p.Envio AS envio,
             p.Neto AS net, p.Iva AS iva, p.Total AS total, c.Nombre AS cliente, c.Email AS email
      FROM dbo.Pedidos p JOIN dbo.Clientes c ON c.IdCliente = p.IdCliente
      ${where} ORDER BY p.Fecha, p.IdPedido`, params);
@@ -89,7 +91,16 @@ async function buildOrders(where, params) {
       pers: '',
     });
   }
-  return o.recordset.map((x) => ({ ...x, addr: x.addr || '', items: items[x.id] || [] }));
+  return o.recordset.map(({ pmarca, pult, ...x }) => ({
+    ...x,
+    // Para retiro en sucursal se muestra eso; para envío, la dirección completa.
+    addr: x.retiro ? 'Retiro en sucursal'
+      : [x.dir || x.addr, x.ciudad && `${x.ciudad}${x.cp ? ` (${x.cp})` : ''}`, x.pais].filter(Boolean).join(', '),
+    dni: x.dni || '', pais: x.pais || '', ciudad: x.ciudad || '', cp: x.cp || '', dir: x.dir || '',
+    // Del pago solo se guarda la marca y los últimos 4 dígitos (nunca el número completo ni el CVC).
+    pago: pult ? { marca: pmarca, ultimos4: pult, simulado: true } : null,
+    items: items[x.id] || [],
+  }));
 }
 
 async function permsOf(role) {
@@ -244,12 +255,28 @@ route('GET', '/api/mis-pedidos', { auth: 'cli' }, async (ctx) =>
   (await buildOrders('WHERE c.IdCliente = @id', { id: ctx.user.id })).reverse());
 
 // Comprar NO requiere cuenta: este endpoint es público.
+// PAGO SIMULADO: el servidor NO procesa tarjetas. Nunca recibe el número ni el CVC: solo la marca y los últimos 4 dígitos.
+// Para cobrar de verdad hay que integrar una pasarela de pago (Mercado Pago, MODO, etc.) que devuelva la aprobación al servidor.
+const MARCAS = ['Visa', 'Mastercard', 'American Express', 'Otra'];
+const CAMPOS_TARJETA = ['numero', 'numeroTarjeta', 'tarjeta', 'cvc', 'cvv', 'vencimiento', 'venc'];
 route('POST', '/api/pedidos', {}, async (ctx) => {
   const b = ctx.body;
-  const nombre = str(b.nombre, 100, 'el nombre');
+  if (CAMPOS_TARJETA.some((k) => k in b || (b.pago && typeof b.pago === 'object' && k in b.pago)))
+    throw bad('Por seguridad no se aceptan datos de la tarjeta: solo la marca y los últimos 4 dígitos.');
+  const nombre = str(b.nombre, 100, 'el nombre completo');
+  if (!/\S+\s+\S+/.test(nombre)) throw bad('Ingresá tu nombre completo (nombre y apellido).');
   if (!isEmail(b.email)) throw bad('Ingresá un email válido.');
+  const dni = String(b.dni == null ? '' : b.dni);
+  if (!/^\d{7,8}$/.test(dni)) throw bad('El DNI tiene que tener 7 u 8 números.');
+  const pais = str(b.pais, 60, 'el país');
+  const ciudad = str(b.ciudad, 80, 'la ciudad');
+  const codigoPostal = str(b.codigoPostal, 10, 'el código postal');
+  if (!/^[A-Za-z0-9 -]{3,10}$/.test(codigoPostal)) throw bad('El código postal no es válido.');
+  const direccion = str(b.direccion, 200, 'la dirección');
   const retiro = !!b.retiro;
-  const direccion = retiro ? null : str(b.direccion, 200, 'la dirección de entrega');
+  const pago = b.pago;
+  if (!pago || !MARCAS.includes(pago.marca) || !/^\d{4}$/.test(String(pago.ultimos4)))
+    throw bad('Falta el pago: marca y últimos 4 dígitos de la tarjeta.');
   if (!Array.isArray(b.items) || !b.items.length || b.items.length > 50) throw bad('El pedido no tiene productos.');
   const [tl, co] = await Promise.all([
     query('SELECT IdVersion AS id, Nombre AS n FROM dbo.Versiones'),
@@ -269,6 +296,8 @@ route('POST', '/api/pedidos', {}, async (ctx) => {
   });
   const r = await exec('dbo.usp_RegistrarPedido', {
     Nombre: nombre, Email: b.email.trim().toLowerCase(), Retiro: retiro, Direccion: direccion,
+    Pais: pais, Ciudad: ciudad, CodigoPostal: codigoPostal.toUpperCase(), Dni: dni,
+    PagoMarca: pago.marca, PagoUltimos4: String(pago.ultimos4),
     ItemsJson: JSON.stringify(items),
   });
   const id = r.recordset[0].IdPedido;

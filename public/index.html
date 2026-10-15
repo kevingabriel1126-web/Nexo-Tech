@@ -148,6 +148,11 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 .empty{text-align:center;color:var(--mute);padding:36px 10px}
 footer{text-align:center;color:var(--mute);font-size:.85rem;padding:20px}
 @media (prefers-reduced-motion:no-preference){.prod{transition:transform .15s}.prod:hover{transform:translateY(-3px)}}
+.simbox{border:1px dashed var(--g);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.simbox p{margin:6px 0}.simbox ul{margin:6px 0 8px;padding-left:20px}
+.simbox code{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--bg);padding:1px 6px;border-radius:5px;font-size:.92em}
+h3.ch{font-size:1.05rem;margin:18px 0 8px}
+.two .f{margin-bottom:10px}.panel>.f{margin-bottom:10px}
 
 /* ===== Nexo Tech: colores del logo (negro azulado, celeste, azul y violeta neón) ===== */
 body{background:radial-gradient(900px 520px at 12% -8%,rgba(60,110,255,.16),transparent 62%),radial-gradient(800px 480px at 100% 0,rgba(168,85,247,.13),transparent 58%),var(--bg);background-attachment:fixed;font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif}
@@ -500,40 +505,104 @@ function vCarrito(){
 function qty(i,d){const it=cartItems()[i];if(!it)return;let n=it.q+d;if(d>0&&inCart(it.p.id)>=it.p.stock)n=it.q;if(n<=0)delete S.cart[it.k];else S.cart[it.k]=n;render()}
 
 /* ---------- CHECKOUT ---------- */
-function keepForm(){const g=x=>document.getElementById(x);if(g('cn'))S.form={n:g('cn').value,e:g('ce').value,a:g('ca')?g('ca').value:S.form.a}}
+/* ---------- PAGO SIMULADO ----------
+   Es una simulación: no se cobra nada. El número de la tarjeta y el CVC se validan en el navegador y NUNCA se guardan
+   ni se envían: del pago solo queda la marca y los últimos 4 dígitos. Para cobrar de verdad hay que integrar una pasarela de pago. */
+const PAISES=['Argentina','Uruguay','Chile','Paraguay','Bolivia','Brasil','Perú','Colombia','México','España','Estados Unidos','Otro'];
+const TARJETA_PRUEBA='4111 1111 1111 1111';
+const dig=v=>String(v==null?'':v).replace(/\D/g,'');
+function luhn(n){let t=0,alt=false;for(let i=n.length-1;i>=0;i--){let d=+n[i];if(alt){d*=2;if(d>9)d-=9}t+=d;alt=!alt}return n.length>0&&t%10===0}
+function marcaDe(n){return /^4/.test(n)?'Visa':/^(5[1-5]|2[2-7])/.test(n)?'Mastercard':/^3[47]/.test(n)?'American Express':'Otra'}
+function fmtCard(el){
+  const n=dig(el.value).slice(0,19),g=/^3[47]/.test(n)?[4,6,5]:[4,4,4,4,3],out=[];let i=0;
+  for(const k of g){if(i>=n.length)break;out.push(n.slice(i,i+k));i+=k}
+  el.value=out.join(' ');const b=document.getElementById('fb');if(b)b.textContent=n.length>=2?marcaDe(n):'';
+}
+function fmtExp(el){let v=dig(el.value).slice(0,4);if(v.length>=3)v=v.slice(0,2)+'/'+v.slice(2);el.value=v}
+function onlyDig(el,max){el.value=dig(el.value).slice(0,max)}
+function validarPago(F){
+  const nom=(F.n||'').trim().replace(/\s+/g,' ');
+  if(nom.length<5||!nom.includes(' '))return 'Ingresá tu nombre completo (nombre y apellido).';
+  if(!/^\d{7,8}$/.test(dig(F.dni)))return 'El DNI tiene que tener 7 u 8 números, sin puntos.';
+  if(!/^\S+@\S+\.\S+$/.test((F.e||'').trim()))return 'Ingresá un email válido.';
+  if(!F.pais)return 'Elegí tu país.';
+  if((F.ciudad||'').trim().length<2)return 'Ingresá tu ciudad.';
+  if((F.dir||'').trim().length<5)return 'Ingresá tu dirección (calle y número).';
+  if(!/^[A-Za-z0-9 -]{3,10}$/.test((F.cp||'').trim()))return 'El código postal no es válido.';
+  const num=dig(F.tar);
+  if(num.length<13||num.length>19||!luhn(num))return 'El número de tarjeta no es válido. Para probar usá '+TARJETA_PRUEBA+'.';
+  const m=/^(0[1-9]|1[0-2])\/(\d{2})$/.exec((F.venc||'').trim());
+  if(!m)return 'El vencimiento tiene que tener el formato MM/AA (por ejemplo 12/30).';
+  if(new Date(2000+(+m[2]),+m[1],1)<=new Date())return 'La tarjeta está vencida.';
+  const need=marcaDe(num)==='American Express'?4:3;
+  if(dig(F.cvc).length!==need)return 'El CVC tiene que tener '+need+' números.';
+  return null;
+}
+function pasarelaSimulada(F){
+  const num=dig(F.tar),u=num.slice(-4);
+  if(u==='0002')return {ok:false,msg:'El banco rechazó la tarjeta (simulación). Probá con otra tarjeta.'};
+  if(u==='9995')return {ok:false,msg:'La tarjeta no tiene fondos suficientes (simulación). Probá con otra tarjeta.'};
+  return {ok:true,marca:marcaDe(num),ultimos4:u};
+}
+function datosPrueba(){
+  keepForm();const F=S.form;
+  S.form={n:F.n||'María Pérez',dni:'30123456',e:F.e||'maria@example.com',pais:'Argentina',ciudad:'Banfield',dir:'Av. Hipólito Yrigoyen 8500',cp:'1828',tar:TARJETA_PRUEBA,venc:'12/30',cvc:'123'};
+  S.err='';renderMain();
+}
+function keepForm(){
+  const g=x=>document.getElementById(x);if(!g('fn'))return;
+  S.form={n:g('fn').value,dni:g('fi').value,e:g('fe').value,pais:g('fp').value,ciudad:g('fc').value,dir:g('fd').value,cp:g('fz').value,tar:g('ft').value,venc:g('fv').value,cvc:g('fx').value};
+}
 function setCo(k,v){keepForm();S.co[k]=v;renderMain()}
 function vCheckout(){
   const it=cartItems();if(!it.length)return vCarrito();
-  const T=totals(),dom=S.co.envio==='domicilio',F=S.form;
-  return `<h2 style="margin-bottom:6px">Confirmar pedido</h2><p class="mut" style="margin:0 0 12px">Comprás sin crear una cuenta: solo necesitamos tu nombre y tu email.</p><div class="panel">
-  <div class="f" style="margin-bottom:10px"><label for="cn">Nombre y apellido</label><input id="cn" autocomplete="name" value="${esc(F.n)}"></div>
-  <div class="f" style="margin-bottom:10px"><label for="ce">Email</label><input id="ce" type="email" autocomplete="email" value="${esc(F.e)}"></div>
-  <h3 style="margin:14px 0 8px">Entrega</h3>
+  const T=totals(),dom=S.co.envio==='domicilio',F=S.form,pc=!!S.paying,v=k=>esc(F[k]||'');
+  return `<h2 style="margin-bottom:6px">Confirmar pedido</h2><p class="mut" style="margin:0 0 12px">Comprás sin crear una cuenta.</p><div class="panel">
+  <div class="simbox" role="note"><strong>Pago simulado</strong>
+  <p>Esto es una demostración: no se cobra nada y <strong>no ingreses los datos de tu tarjeta real</strong>. Usá una tarjeta de prueba:</p>
+  <ul><li><code>4111 1111 1111 1111</code>: pago aprobado</li><li><code>4000 0000 0000 0002</code>: tarjeta rechazada</li><li><code>4000 0000 0000 9995</code>: fondos insuficientes</li></ul>
+  <p>Con cualquier vencimiento futuro y un CVC de 3 números.</p><button type="button" class="btn sec" onclick="datosPrueba()">Completar con datos de prueba</button></div>
+  <h3 class="ch">Tus datos</h3>
+  <div class="two"><div class="f"><label for="fn">Nombre completo</label><input id="fn" autocomplete="name" value="${v('n')}"></div><div class="f"><label for="fi">DNI</label><input id="fi" inputmode="numeric" maxlength="8" placeholder="Sin puntos" oninput="onlyDig(this,8)" value="${v('dni')}"></div></div>
+  <div class="f"><label for="fe">Email</label><input id="fe" type="email" autocomplete="email" value="${v('e')}"></div>
+  <h3 class="ch">Dirección</h3>
+  <div class="two"><div class="f"><label for="fp">País</label><select id="fp" autocomplete="country-name">${PAISES.map(p=>`<option ${(F.pais||'Argentina')===p?'selected':''}>${p}</option>`).join('')}</select></div><div class="f"><label for="fc">Ciudad</label><input id="fc" autocomplete="address-level2" value="${v('ciudad')}"></div></div>
+  <div class="two"><div class="f"><label for="fd">Dirección</label><input id="fd" autocomplete="street-address" placeholder="Calle y número" value="${v('dir')}"></div><div class="f"><label for="fz">Código postal</label><input id="fz" autocomplete="postal-code" maxlength="10" value="${v('cp')}"></div></div>
+  <h3 class="ch">Entrega</h3>
   <label class="opt"><input type="radio" name="env" ${!dom?'checked':''} onchange="setCo('envio','retiro')"><span><strong>Retiro en sucursal</strong> · Gratis<br><span class="mut">Te avisamos por email cuando esté listo</span></span></label>
-  <label class="opt"><input type="radio" name="env" ${dom?'checked':''} onchange="setCo('envio','domicilio')"><span><strong>Envío a domicilio</strong> · ${cartSub()>=FREE?'Gratis':$m(SHIP)}</span></label>
-  ${dom?`<div class="f" style="margin-bottom:10px"><label for="ca">Dirección de entrega</label><input id="ca" autocomplete="street-address" value="${esc(F.a)}"></div>`:''}
+  <label class="opt"><input type="radio" name="env" ${dom?'checked':''} onchange="setCo('envio','domicilio')"><span><strong>Envío a domicilio</strong> · ${cartSub()>=FREE?'Gratis':$m(SHIP)}<br><span class="mut">Lo enviamos a la dirección de arriba</span></span></label>
+  <h3 class="ch">Pago con tarjeta</h3>
+  <div class="f"><label for="ft">Número de tarjeta <span id="fb" class="mut"></span></label><input id="ft" inputmode="numeric" autocomplete="cc-number" maxlength="23" placeholder="0000 0000 0000 0000" oninput="fmtCard(this)" value="${v('tar')}"></div>
+  <div class="two"><div class="f"><label for="fv">Vencimiento (MM/AA)</label><input id="fv" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="MM/AA" oninput="fmtExp(this)" value="${v('venc')}"></div><div class="f"><label for="fx">CVC</label><input id="fx" type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="123" oninput="onlyDig(this,4)" value="${v('cvc')}"></div></div>
   ${S.err?`<div class="msg" role="alert">${esc(S.err)}</div>`:''}
-  <h3 style="margin:16px 0 6px">Resumen</h3>${it.map(({p,q,size,color,pers})=>`<div class="tot"><span>${q} × ${esc(p.name)}${size||color||pers?' ('+esc(vlabel(size,color,pers))+')':''}</span><span>${$m(unitOf(p,pers)*q)}</span></div>`).join('')}
+  <h3 class="ch">Resumen</h3>${it.map(({p,q,size,color,pers})=>`<div class="tot"><span>${q} × ${esc(p.name)}${size||color||pers?' ('+esc(vlabel(size,color,pers))+')':''}</span><span>${$m(unitOf(p,pers)*q)}</span></div>`).join('')}
   <div class="tot"><span>Subtotal</span><span>${$m(T.sub)}</span></div>
   <div class="tot"><span>Envío</span><span>${T.envio?$m(T.envio):'Gratis'}</span></div>
   <div class="tot big"><span>Total a pagar</span><span>${$m(T.total)}</span></div>
   <div class="mut">6 cuotas sin interés de ${$m(T.total/6)}</div>
-  <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap"><button class="btn sec" onclick="go('carrito')">Volver al carrito</button><button class="btn" onclick="confirmOrder()">Confirmar compra</button></div></div>`;
+  <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap"><button class="btn sec" ${pc?'disabled':''} onclick="go('carrito')">Volver al carrito</button><button class="btn" ${pc?'disabled':''} onclick="confirmOrder()">${pc?'Procesando el pago…':'Pagar '+$m(T.total)}</button></div></div>`;
 }
 async function confirmOrder(){
+  if(S.paying)return;
   keepForm();const F=S.form,T=totals(),dom=!T.retiro;
-  const n=F.n.trim(),e=F.e.trim(),a=F.a.trim();
-  if(!n||!/^\S+@\S+\.\S+$/.test(e)||(dom&&!a)){S.err=dom?'Completá nombre, un email válido y la dirección de entrega.':'Completá tu nombre y un email válido.';renderMain();return}
+  const err=validarPago(F);if(err){S.err=err;renderMain();return}
+  S.err='';S.paying=true;renderMain();
+  await new Promise(r=>setTimeout(r,1500));            // simula la espera de la pasarela de pago
+  const pg=pasarelaSimulada(F);S.paying=false;
+  if(!pg.ok){S.err=pg.msg;renderMain();return}
   const items=cartItems().map(({p,q,size,color})=>({idProducto:p.id,version:size||null,color:color||null,cantidad:q}));
   try{
-    const r=await api('POST','/api/pedidos',{nombre:n,email:e,retiro:!dom,direccion:dom?a:null,items});
-    S.last=r.order;S.cart={};S.err='';S.form=S.cust?{n:S.cust.name,e:S.cust.email,a:''}:{n:'',e:'',a:''};
+    // El número de la tarjeta y el CVC NO se envían al servidor: solo la marca y los últimos 4 dígitos.
+    const r=await api('POST','/api/pedidos',{nombre:F.n.trim().replace(/\s+/g,' '),email:F.e.trim(),dni:dig(F.dni),pais:F.pais,ciudad:F.ciudad.trim(),codigoPostal:F.cp.trim().toUpperCase(),direccion:F.dir.trim(),retiro:!dom,pago:{marca:pg.marca,ultimos4:pg.ultimos4},items});
+    S.last=r.order;S.cart={};S.err='';S.form=S.cust?{n:S.cust.name,e:S.cust.email}:{n:'',e:''};
     await loadPublic();go('gracias');
-  }catch(err){S.err=err.message;renderMain()}
+  }catch(e2){S.err=e2.message;renderMain()}
 }
 function vGracias(){
   const o=S.last;if(!o)return vTienda();
-  return `<div class="panel"><div class="msg ok">Pedido confirmado. Te enviaremos el detalle a ${esc(o.email)}.</div><h2>Pedido N° ${o.id} ${stBadge(o)}</h2><p class="mut">${fdate(o.date)} · ${esc(o.cliente)} · ${esc(o.addr)}</p>
+  const pg=o.pago;
+  return `<div class="panel"><div class="msg ok">¡Pago aprobado!${pg?` Pagaste con ${esc(pg.marca)} terminada en ${esc(pg.ultimos4)}.`:''} Te enviaremos el detalle a ${esc(o.email)}.</div>${pg?'<p class="mut" style="margin:0 0 8px">Pago simulado: no se realizó ningún cobro.</p>':''}
+  <h2>Pedido N° ${o.id} ${stBadge(o)}</h2><p class="mut" style="margin:4px 0">${fdate(o.date)} · ${esc(o.cliente)}${o.dni?' · DNI '+esc(o.dni):''}</p><p class="mut" style="margin:0 0 8px">${esc(o.addr)}</p>
   ${o.items.map(i=>`<div class="tot"><span>${i.qty} × ${esc(i.name)}${i.size||i.color||i.pers?' ('+esc(vlabel(i.size,i.color,i.pers))+')':''}</span><span>${$m(i.net*(1+i.iva/100)*i.qty)}</span></div>`).join('')}
   <div class="tot"><span>Subtotal</span><span>${$m(o.sub)}</span></div>
   <div class="tot"><span>Envío</span><span>${o.envio?$m(o.envio):'Gratis'}</span></div>
@@ -765,7 +834,7 @@ function aPed(){
   <div class="tabs" role="tablist"><button class="tab" role="tab" aria-selected="${!S.pf}" onclick="S.pf='';renderMain()">Todos (${db.orders.length})</button>${ESTADOS.map(e=>`<button class="tab" role="tab" aria-selected="${S.pf===e}" onclick="S.pf='${e}';renderMain()">${e[0].toUpperCase()+e.slice(1)} (${cnt(e)})</button>`).join('')}</div>
   <div class="row"><div class="f"><label for="pqi">Buscar por número, nombre o email</label><input id="pqi" value="${esc(S.pq)}" oninput="pSearch(this.value)"></div></div>
   ${L.length?`<div class="tw"><table><thead><tr><th>N°</th><th>Fecha</th><th>Cliente</th><th>Entrega</th><th>Productos</th><th class="r">Total</th><th>Estado</th></tr></thead><tbody>
-  ${L.map(o=>`<tr><td>${o.id}</td><td>${fdate(o.date)}</td><td>${esc(o.cliente)}<div class="mut">${esc(o.email||'')}</div></td><td>${o.retiro?'Retiro en sucursal':esc(o.addr||'—')}</td>
+  ${L.map(o=>`<tr><td>${o.id}</td><td>${fdate(o.date)}</td><td>${esc(o.cliente)}<div class="mut">${esc(o.email||'')}</div>${o.dni?`<div class="mut">DNI ${esc(o.dni)}</div>`:''}</td><td>${o.retiro?'Retiro en sucursal':esc(o.addr||'—')}</td>
   <td>${o.items.map(i=>`${i.qty}× ${esc(i.name)}${i.size||i.color||i.pers?' ('+esc(vlabel(i.size,i.color,i.pers))+')':''}`).join(', ')}</td><td class="r">${$m(o.total)}</td>
   <td>${o.estado==='cancelado'?stBadge(o):`<select aria-label="Estado del pedido ${o.id}" onchange="setEstado(${o.id},this.value)">${ESTADOS.map(e=>`<option ${o.estado===e?'selected':''}>${e}</option>`).join('')}</select>`}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">No hay pedidos con ese filtro.</div>'}
   <p class="mut">Al cancelar un pedido se devuelve el stock y deja de contarse en la facturación y en las ganancias. Un pedido cancelado no se puede reactivar.</p></div>`;
