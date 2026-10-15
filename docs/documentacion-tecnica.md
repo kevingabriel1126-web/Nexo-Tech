@@ -22,7 +22,7 @@ Los datos (productos, pedidos, clientes, empleados) se guardan en **SQL Server**
 | C. Tienda | Catálogo dinámico, buscador y filtros, carrito y proceso de confirmación de pedido. |
 | D. Reportes y listados de ventas | Listado general de ventas (por fechas y producto) y facturación diaria, semanal, mensual y anual. |
 
-Además: estados de pedido, favoritos, cuentas opcionales de clientes, botón de arrepentimiento, newsletter y una sección de ganancias para el dueño.
+Además: estados de pedido, favoritos, cuentas opcionales de clientes, **pago con tarjeta simulado**, botón de arrepentimiento, newsletter y una sección de ganancias para el dueño.
 
 # 2. Arquitectura
 
@@ -60,6 +60,7 @@ Las tablas se agrupan así:
 - **Precios.** `Productos` guarda el precio neto (sin IVA), el IVA y el descuento. El precio al público y el precio final son columnas calculadas, por lo que siempre son coherentes.
 - **Historial de precios.** `DetallePedido` guarda el precio neto y el costo **al momento de la compra**. Si después cambia el precio, las ventas anteriores no se alteran.
 - **Imágenes.** Cada producto puede tener una imagen (PNG, JPG, WEBP o GIF de hasta 300 KB). El servidor guarda el archivo en la carpeta `uploads/` y en la base queda solo su dirección (`ImagenUrl`). Si el producto no tiene imagen, se muestra un ícono.
+- **Pago simulado.** El pago pide nombre completo, DNI, email, país, ciudad, dirección, código postal, número de tarjeta, vencimiento y CVC. La página valida los datos (el número con el algoritmo de Luhn, el vencimiento y el CVC) y simula la respuesta de una pasarela: la tarjeta `4111 1111 1111 1111` se aprueba, la `4000 0000 0000 0002` se rechaza y la `4000 0000 0000 9995` falla por fondos insuficientes. **El número completo y el CVC nunca se guardan ni se envían al servidor**: del pago solo se guarda la marca y los últimos 4 dígitos. Si el pago se aprueba, el pedido queda en estado `pagado`; si se rechaza, no se crea el pedido y el carrito se conserva.
 - **Baja de productos.** Un producto no se borra: se marca `Activo = 0`. Así se conserva el historial de ventas.
 - **Versiones y colores.** Cada producto puede tener versiones (capacidad, pulgadas) y colores. Si las tiene, el cliente debe elegir una al comprar. El catálogo actual no usa versiones ni colores, pero el sistema los soporta y se cargan desde el panel.
 - **Clientes con o sin cuenta.** Todo pedido queda asociado a un cliente identificado por email. Si el cliente nunca creó una cuenta, `ClaveHash` queda en `NULL`. Si después crea una cuenta con el mismo email, conserva sus pedidos anteriores.
@@ -127,7 +128,7 @@ Todas las respuestas son JSON. Las rutas de empleados necesitan una sesión (`Au
 | Método y ruta | Acceso |
 |---|---|
 | `GET /api/productos` | Público (solo productos activos, sin costos) |
-| `POST /api/pedidos` | Público: se compra **sin cuenta** |
+| `POST /api/pedidos` | Público: se compra **sin cuenta**. Recibe los datos del comprador y del pago simulado (marca y últimos 4 dígitos); rechaza cualquier dato de la tarjeta. |
 | `POST /api/newsletter`, `POST /api/arrepentimientos` | Público |
 | `POST /api/login`, `POST /api/cuentas` | Público (con límite de intentos) |
 | `GET /api/yo` | Sesión (empleado o cliente) |
@@ -154,6 +155,7 @@ Todas las respuestas son JSON. Las rutas de empleados necesitan una sesión (`Au
 | Fuerza bruta | Límite de intentos de login y de creación de cuentas por IP. |
 | Errores | Los errores internos no muestran detalles; los errores de negocio muestran un mensaje claro. |
 | Archivos | No se puede salir de la carpeta pública; las imágenes subidas solo pueden ser PNG, JPG, WEBP o GIF de hasta 300 KB. |
+| Datos de la tarjeta | El número y el CVC se validan solo en el navegador y no se envían ni se guardan. El servidor rechaza (error 400) cualquier solicitud que los incluya. |
 | Cabeceras | `Content-Security-Policy`, `X-Content-Type-Options` y `Referrer-Policy`. |
 | Usuario de base de datos | La aplicación usa un usuario con permisos mínimos (`banfield_app`), no `sa`. |
 
@@ -161,12 +163,13 @@ Para publicar el sitio en internet hay que ponerlo detrás de **HTTPS** (por eje
 
 # 8. Pruebas
 
-El proyecto incluye pruebas automáticas del servidor (`npm test`, 13 pruebas). Usan una base de datos simulada, por lo que no necesitan SQL Server. Verifican:
+El proyecto incluye pruebas automáticas del servidor (`npm test`, 14 pruebas). Usan una base de datos simulada, por lo que no necesitan SQL Server. Verifican:
 
 - que el catálogo público no incluya costos;
 - respuestas 401 y 403 sin sesión o sin permiso, y que las ganancias y los costos solo lleguen al dueño;
 - el login de empleados y clientes, el límite de intentos y que un texto malicioso viaje como parámetro;
-- que se pueda comprar sin cuenta y que los datos se validen;
+- que se pueda comprar sin cuenta y que los datos del comprador y del pago se validen;
+- que el servidor rechace cualquier dato de la tarjeta (número, CVC o vencimiento);
 - el mapeo de los errores de negocio y la ocultación de errores internos;
 - que no se pueda salir de la carpeta pública.
 
@@ -184,7 +187,7 @@ Usuarios de prueba del personal: `dueno / dueno123`, `gerente / gerente123`, `ad
 
 # 10. Limitaciones y mejoras posibles
 
-- Falta el **pago real** (MODO o Mercado Pago) y el cálculo de envío por código postal.
+- El **pago es una simulación**: no se cobra nada. Para cobrar de verdad hay que integrar una pasarela de pago (MODO, Mercado Pago u otra) que tokenice la tarjeta y confirme la aprobación al servidor. Tampoco está el cálculo de envío por código postal.
 - No se envían **emails** automáticos de confirmación ni de cambio de estado.
 - El stock es uno por producto, no por versión o color.
 - No hay comprobante en PDF ni exportación a Excel.

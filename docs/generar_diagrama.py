@@ -11,7 +11,7 @@ T={
 'ProductoVersiones':[('IdProducto','PK,FK'),('IdVersion','PK,FK')],
 'ProductoColores':[('IdProducto','PK,FK'),('IdColor','PK,FK')],
 'Clientes':[('IdCliente','PK'),('Nombre',''),('Email',''),('ClaveSalt / ClaveHash (opcional)',''),('FechaCuenta','')],
-'Pedidos':[('IdPedido','PK'),('IdCliente','FK'),('Fecha',''),('Estado',''),('Retiro / DireccionEntrega',''),('Subtotal, Descuento, Envio',''),('Neto, Iva, Total','')],
+'Pedidos':[('IdPedido','PK'),('IdCliente','FK'),('Fecha',''),('Estado',''),('Retiro / DireccionEntrega',''),('DireccionCliente, Pais, Ciudad',''),('CodigoPostal / Dni',''),('PagoMarca / PagoUltimos4 (simulado)',''),('Subtotal, Descuento, Envio',''),('Neto, Iva, Total','')],
 'DetallePedido':[('IdDetalle','PK'),('IdPedido','FK'),('IdProducto','FK'),('IdVersion','FK'),('IdColor','FK'),('Cantidad',''),('PrecioNetoUnitario',''),('CostoUnitario',''),('IvaPorcentaje',''),('TotalLinea (calculado)','')],
 'Suscriptores':[('IdSuscriptor','PK'),('Email',''),('Fecha','')],
 'Arrepentimientos':[('IdArrepentimiento','PK'),('Nombre / Email',''),('MontoReembolso',''),('NumeroCompra',''),('IdPedido','FK'),('Estado',''),('Fecha','')],
