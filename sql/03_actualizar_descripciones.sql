@@ -3,10 +3,10 @@
 USE EcommerceBanfield;
 GO
 
-UPDATE dbo.Productos SET Descripcion = N'Celular de alta gama con pantalla Dynamic AMOLED 2X de 6,2", procesador Exynos 2400, triple cámara de 50 MP y funciones de Galaxy AI. Batería de 4000 mAh con carga rápida de 25W.' WHERE Nombre = N'Smartphone Samsung Galaxy S24 128GB';
-UPDATE dbo.Productos SET Descripcion = N'iPhone con chip A16 Bionic, pantalla Super Retina XDR de 6,1", cámara principal de 48 MP y conector USB-C. Resistente al agua IP68 y carga inalámbrica MagSafe.' WHERE Nombre = N'Smartphone Apple iPhone 15 128GB';
-UPDATE dbo.Productos SET Descripcion = N'Celular con pantalla AMOLED de 6,67" a 120 Hz, cámara de 108 MP, batería de 5000 mAh y carga rápida de 33W. Excelente relación precio-calidad.' WHERE Nombre = N'Smartphone Xiaomi Redmi Note 13';
-UPDATE dbo.Productos SET Descripcion = N'Smartphone con pantalla pOLED curva de 6,7" a 120 Hz, cámara de 50 MP con OIS, carga TurboPower de 68W y resistencia al agua IP68.' WHERE Nombre = N'Smartphone Motorola Edge 50';
+UPDATE dbo.Productos SET Descripcion = N'Celular de alta gama con pantalla Dynamic AMOLED 2X de 6,2", procesador Exynos 2400, triple cámara de 50 MP y funciones de Galaxy AI. Batería de 4000 mAh con carga rápida de 25W.' WHERE Nombre = N'Celular Samsung Galaxy S24 128GB';
+UPDATE dbo.Productos SET Descripcion = N'iPhone con chip A16 Bionic, pantalla Super Retina XDR de 6,1", cámara principal de 48 MP y conector USB-C. Resistente al agua IP68 y carga inalámbrica MagSafe.' WHERE Nombre = N'Celular Apple iPhone 15 128GB';
+UPDATE dbo.Productos SET Descripcion = N'Celular con pantalla AMOLED de 6,67" a 120 Hz, cámara de 108 MP, batería de 5000 mAh y carga rápida de 33W. Excelente relación precio-calidad.' WHERE Nombre = N'Celular Xiaomi Redmi Note 13';
+UPDATE dbo.Productos SET Descripcion = N'Celular con pantalla pOLED curva de 6,7" a 120 Hz, cámara de 50 MP con OIS, carga TurboPower de 68W y resistencia al agua IP68.' WHERE Nombre = N'Celular Motorola Edge 50';
 
 UPDATE dbo.Productos SET Descripcion = N'Notebook ideal para oficina y estudio: Intel Core i5 de 11ª gen, 8 GB de RAM DDR4, SSD de 256 GB y pantalla Full HD de 15,6" antirreflejo.' WHERE Nombre = N'Notebook Lenovo IdeaPad 3 15"';
 UPDATE dbo.Productos SET Descripcion = N'Ultrabook con chip Apple M2, 8 GB de RAM unificada, SSD de 256 GB y pantalla Liquid Retina de 13,6". Hasta 18 horas de batería y peso de 1,24 kg.' WHERE Nombre = N'Notebook Apple MacBook Air M2 13"';
@@ -49,8 +49,8 @@ UPDATE dbo.Productos SET Descripcion = N'Soporte de aluminio ergonómico con 6 n
 UPDATE dbo.Productos SET Descripcion = N'Batería portátil de 20000 mAh con dos salidas USB, carga rápida de 22,5W, indicador LED de carga y protección contra cortocircuitos.' WHERE Nombre = N'Power Bank 20000mAh';
 UPDATE dbo.Productos SET Descripcion = N'Hub con salida HDMI 4K, 3 puertos USB 3.0, lector de tarjetas SD/microSD, puerto USB-C de datos y entrada USB-C con Power Delivery de 100W.' WHERE Nombre = N'Hub USB-C 7 en 1';
 
-UPDATE dbo.Productos SET Descripcion = N'El tope de gama definitivo: pantalla Dynamic AMOLED 2X de 6.9", procesador de última generación, cámara profesional de 200 MP, 12 GB de RAM y lápiz óptico S Pen integrado.' WHERE Nombre = N'Smartphone Samsung Galaxy S26 Ultra';
-UPDATE dbo.Productos SET Descripcion = N'Innovación pura con chip A20 Pro. Pantalla Super Retina XDR, sistema avanzado de cámaras con grabación de video profesional estabilizado e integración total con IA.' WHERE Nombre = N'Smartphone Apple iPhone 18 Pro';
+UPDATE dbo.Productos SET Descripcion = N'El tope de gama definitivo: pantalla Dynamic AMOLED 2X de 6.9", procesador de última generación, cámara profesional de 200 MP, 12 GB de RAM y lápiz óptico S Pen integrado.' WHERE Nombre = N'Celular Samsung Galaxy S26 Ultra';
+UPDATE dbo.Productos SET Descripcion = N'Innovación pura con chip A20 Pro. Pantalla Super Retina XDR, sistema avanzado de cámaras con grabación de video profesional estabilizado e integración total con IA.' WHERE Nombre = N'Celular Apple iPhone 18 Pro';
 
 UPDATE dbo.Productos SET Descripcion = N'Laptop de alta productividad: Intel Core i5 de 13ª generación, 16 GB de RAM, SSD de 1 TB y pantalla táctil FHD de 15.6". Incluye tecla física de Copilot para asistencia IA.' WHERE Nombre = N'Notebook HP Laptop 15.6" Táctil';
 UPDATE dbo.Productos SET Descripcion = N'Ultrabook premium para IA: procesador AMD Ryzen AI 9, 32 GB de RAM, SSD de 1 TB y una espectacular pantalla táctil WUXGA de 16" con tasa de refresco de 120 Hz.' WHERE Nombre = N'Notebook Acer Swift Go 16 AI';
