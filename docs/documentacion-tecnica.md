@@ -59,6 +59,7 @@ Las tablas se agrupan así:
 
 - **Precios.** `Productos` guarda el precio neto (sin IVA), el IVA y el descuento. El precio al público y el precio final son columnas calculadas, por lo que siempre son coherentes.
 - **Historial de precios.** `DetallePedido` guarda el precio neto y el costo **al momento de la compra**. Si después cambia el precio, las ventas anteriores no se alteran.
+- **Imágenes.** Cada producto puede tener una imagen (PNG, JPG, WEBP o GIF de hasta 300 KB). El servidor guarda el archivo en la carpeta `uploads/` y en la base queda solo su dirección (`ImagenUrl`). Si el producto no tiene imagen, se muestra un ícono.
 - **Baja de productos.** Un producto no se borra: se marca `Activo = 0`. Así se conserva el historial de ventas.
 - **Versiones y colores.** Cada producto puede tener versiones (capacidad, pulgadas) y colores. Si las tiene, el cliente debe elegir una al comprar. El catálogo actual no usa versiones ni colores, pero el sistema los soporta y se cargan desde el panel.
 - **Clientes con o sin cuenta.** Todo pedido queda asociado a un cliente identificado por email. Si el cliente nunca creó una cuenta, `ClaveHash` queda en `NULL`. Si después crea una cuenta con el mismo email, conserva sus pedidos anteriores.
