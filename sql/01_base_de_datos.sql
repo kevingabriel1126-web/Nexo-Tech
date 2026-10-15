@@ -139,7 +139,16 @@ CREATE TABLE dbo.Pedidos (
     Estado           NVARCHAR(15) NOT NULL CONSTRAINT DF_Pedidos_Estado DEFAULT N'pendiente'
         CONSTRAINT CK_Pedidos_Estado CHECK (Estado IN (N'pendiente', N'pagado', N'enviado', N'entregado', N'cancelado')),
     Retiro           BIT NOT NULL,                 -- 1 = retira en el local, 0 = envío a domicilio
-    DireccionEntrega NVARCHAR(200) NULL,
+    DireccionEntrega NVARCHAR(200) NULL,                 -- solo si el envío es a domicilio
+    DireccionCliente NVARCHAR(200) NULL,                 -- dirección que cargó el comprador
+    Pais             NVARCHAR(60)  NULL,
+    Ciudad           NVARCHAR(80)  NULL,
+    CodigoPostal     NVARCHAR(10)  NULL,
+    Dni              VARCHAR(12)   NULL,
+    -- PAGO SIMULADO: nunca se guarda el número completo de la tarjeta ni el CVC, solo la marca y los últimos 4 dígitos.
+    PagoMarca        NVARCHAR(20)  NULL,
+    PagoUltimos4     CHAR(4)       NULL CONSTRAINT CK_Pedidos_Ultimos4 CHECK (PagoUltimos4 IS NULL OR PagoUltimos4 LIKE '[0-9][0-9][0-9][0-9]'),
+    PagoSimulado     BIT NOT NULL CONSTRAINT DF_Pedidos_PagoSimulado DEFAULT 1,
     Subtotal         DECIMAL(14,2) NOT NULL,       -- productos con IVA, antes de descuento y envío
     Descuento        DECIMAL(14,2) NOT NULL CONSTRAINT DF_Pedidos_Descuento DEFAULT 0,   -- reservado para cupones
     Envio            DECIMAL(14,2) NOT NULL CONSTRAINT DF_Pedidos_Envio DEFAULT 0,
@@ -564,7 +573,13 @@ CREATE OR ALTER PROCEDURE dbo.usp_RegistrarPedido
     @Email     NVARCHAR(150),
     @Retiro    BIT,
     @Direccion NVARCHAR(200) = NULL,
-    @ItemsJson NVARCHAR(MAX)
+    @ItemsJson NVARCHAR(MAX),
+    @Pais         NVARCHAR(60)  = NULL,
+    @Ciudad       NVARCHAR(80)  = NULL,
+    @CodigoPostal NVARCHAR(10)  = NULL,
+    @Dni          VARCHAR(12)   = NULL,
+    @PagoMarca    NVARCHAR(20)  = NULL,       -- pago simulado: solo la marca y los últimos 4 dígitos
+    @PagoUltimos4 CHAR(4)       = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -650,9 +665,11 @@ BEGIN
         ELSE
             UPDATE dbo.Clientes SET Nombre = @Nombre WHERE IdCliente = @IdCliente;
 
-        INSERT dbo.Pedidos (IdCliente, Retiro, DireccionEntrega, Subtotal, Descuento, Envio, Neto, Iva, Total)
-        VALUES (@IdCliente, @Retiro, CASE WHEN @Retiro = 1 THEN NULL ELSE @Direccion END,
-                @Sub, @Desc, @Envio, @Neto, @Iva, @Total);
+        INSERT dbo.Pedidos (IdCliente, Estado, Retiro, DireccionEntrega, DireccionCliente, Pais, Ciudad, CodigoPostal, Dni,
+                            PagoMarca, PagoUltimos4, Subtotal, Descuento, Envio, Neto, Iva, Total)
+        VALUES (@IdCliente, CASE WHEN @PagoUltimos4 IS NOT NULL THEN N'pagado' ELSE N'pendiente' END,
+                @Retiro, CASE WHEN @Retiro = 1 THEN NULL ELSE @Direccion END, @Direccion, @Pais, @Ciudad, @CodigoPostal, @Dni,
+                @PagoMarca, @PagoUltimos4, @Sub, @Desc, @Envio, @Neto, @Iva, @Total);
         SET @IdPedido = SCOPE_IDENTITY();
 
         INSERT dbo.DetallePedido (IdPedido, IdProducto, IdVersion, IdColor, Cantidad, PrecioNetoUnitario, IvaPorcentaje, CostoUnitario)
