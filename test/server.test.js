@@ -133,30 +133,58 @@ test('inyección SQL: lo que escribe el usuario viaja como parámetro, nunca den
   assert.ok(state.log.some((l) => Object.values(l.params).includes(evil.toLowerCase()) || Object.values(l.params).includes(evil)));
 });
 
+const PEDIDO_OK = {
+  nombre: 'Ana Pérez', email: 'A@B.com', dni: '30123456', pais: 'Argentina', ciudad: 'Banfield', codigoPostal: '1828',
+  direccion: 'Calle 1 123', retiro: true, pago: { marca: 'Visa', ultimos4: '1111' },
+  items: [{ idProducto: 1, cantidad: 1, version: '128 GB', color: 'Negro' }],
+};
+
 test('pedido sin cuenta: valida los datos y llama al procedimiento con parámetros', async () => {
-  assert.equal((await call('POST', '/api/pedidos', { body: { nombre: 'Ana', email: 'mal', retiro: true, items: [{ idProducto: 1, cantidad: 1 }] } })).status, 400);
+  const sin = (k) => { const x = { ...PEDIDO_OK }; delete x[k]; return x; };
   state.handlers.push({ match: /FROM dbo\.Versiones/, reply: [{ id: 1, n: '128 GB' }] }, { match: /FROM dbo\.Colores/, reply: [{ id: 1, n: 'Negro' }] });
-  assert.equal((await call('POST', '/api/pedidos', { body: { nombre: 'Ana', email: 'a@b.com', retiro: true, items: [] } })).status, 400);
-  assert.equal((await call('POST', '/api/pedidos', { body: { nombre: 'Ana', email: 'a@b.com', retiro: false, items: [{ idProducto: 1, cantidad: 1 }] } })).status, 400, 'falta la dirección');
-  assert.equal((await call('POST', '/api/pedidos', { body: { nombre: 'Ana', email: 'a@b.com', retiro: true, items: [{ idProducto: 1, cantidad: 1, version: '999 TB' }] } })).status, 400);
+  assert.equal((await call('POST', '/api/pedidos', { body: { ...PEDIDO_OK, email: 'mal' } })).status, 400);
+  assert.equal((await call('POST', '/api/pedidos', { body: { ...PEDIDO_OK, nombre: 'Ana' } })).status, 400, 'nombre completo');
+  assert.equal((await call('POST', '/api/pedidos', { body: { ...PEDIDO_OK, dni: '12.345' } })).status, 400, 'DNI');
+  assert.equal((await call('POST', '/api/pedidos', { body: { ...PEDIDO_OK, codigoPostal: '??' } })).status, 400, 'código postal');
+  for (const k of ['pais', 'ciudad', 'direccion', 'pago']) assert.equal((await call('POST', '/api/pedidos', { body: sin(k) })).status, 400, 'falta ' + k);
+  assert.equal((await call('POST', '/api/pedidos', { body: { ...PEDIDO_OK, pago: { marca: 'Visa', ultimos4: '11' } } })).status, 400, 'últimos 4');
+  assert.equal((await call('POST', '/api/pedidos', { body: { ...PEDIDO_OK, items: [] } })).status, 400);
+  assert.equal((await call('POST', '/api/pedidos', { body: { ...PEDIDO_OK, items: [{ idProducto: 1, cantidad: 1, version: '999 TB' }] } })).status, 400);
   state.log = [];
   state.handlers.push(
     { kind: 'exec', match: 'usp_RegistrarPedido', reply: [{ IdPedido: 1000, Total: 500 }] },
-    { kind: 'query', match: /FROM dbo\.Pedidos p JOIN/, reply: [{ id: 1000, date: '2026-10-10T10:00:00', estado: 'pendiente', retiro: true, addr: null, sub: 500, dsc: 0, envio: 0, net: 413, iva: 87, total: 500, cliente: 'Ana', email: 'a@b.com' }] },
+    { kind: 'query', match: /FROM dbo\.Pedidos p JOIN/, reply: [{ id: 1000, date: '2026-10-10T10:00:00', estado: 'pagado', retiro: false, addr: 'Calle 1 123', dir: 'Calle 1 123', pais: 'Argentina', ciudad: 'Banfield', cp: '1828', dni: '30123456', pmarca: 'Visa', pult: '1111', sub: 500, dsc: 0, envio: 0, net: 413, iva: 87, total: 500, cliente: 'Ana Pérez', email: 'a@b.com' }] },
     { kind: 'query', match: /FROM dbo\.DetallePedido/, reply: [{ oid: 1000, id: 1, name: 'Celular', qty: 1, net: 413, iva: 21, size: '128 GB', color: 'Negro' }] });
-  const r = await call('POST', '/api/pedidos', { body: { nombre: 'Ana', email: 'A@B.com', retiro: true, items: [{ idProducto: 1, cantidad: 1, version: '128 GB', color: 'Negro' }] } });
+  const r = await call('POST', '/api/pedidos', { body: PEDIDO_OK });
   assert.equal(r.status, 200);
   assert.equal(r.data.order.id, 1000);
+  assert.equal(r.data.order.estado, 'pagado');
+  assert.deepEqual(r.data.order.pago, { marca: 'Visa', ultimos4: '1111', simulado: true });
+  assert.equal(r.data.order.addr, 'Calle 1 123, Banfield (1828), Argentina');
   assert.equal(r.data.order.items[0].size, '128 GB');
   const call1 = state.log.find((l) => l.proc === 'dbo.usp_RegistrarPedido');
   assert.equal(call1.params.Email, 'a@b.com');
+  assert.equal(call1.params.Dni, '30123456');
+  assert.equal(call1.params.PagoUltimos4, '1111');
   assert.deepEqual(JSON.parse(call1.params.ItemsJson), [{ idProducto: 1, idVersion: 1, idColor: 1, cantidad: 1 }]);
+});
+
+test('pago simulado: el servidor rechaza cualquier dato de la tarjeta (número, CVC, vencimiento)', async () => {
+  state.handlers.push({ match: /FROM dbo\.Versiones/, reply: [] }, { match: /FROM dbo\.Colores/, reply: [] });
+  for (const extra of [{ numeroTarjeta: '4111111111111111' }, { cvc: '123' }, { tarjeta: '4111 1111 1111 1111' }, { vencimiento: '12/30' }]) {
+    const r = await call('POST', '/api/pedidos', { body: { ...PEDIDO_OK, ...extra } });
+    assert.equal(r.status, 400, JSON.stringify(extra));
+    assert.match(r.data.error, /tarjeta/);
+  }
+  const r2 = await call('POST', '/api/pedidos', { body: { ...PEDIDO_OK, pago: { marca: 'Visa', ultimos4: '1111', cvc: '123' } } });
+  assert.equal(r2.status, 400);
+  assert.ok(!state.log.some((l) => l.proc === 'dbo.usp_RegistrarPedido'), 'no se llegó a registrar nada');
 });
 
 test('errores de negocio de SQL Server (THROW 5xxxx) llegan como 400 con su mensaje', async () => {
   const err = new Error('No hay stock suficiente para completar el pedido.'); err.number = 50008;
   state.handlers.push({ match: /FROM dbo\.Versiones/, reply: [] }, { match: /FROM dbo\.Colores/, reply: [] }, { kind: 'exec', match: 'usp_RegistrarPedido', reply: err });
-  const r = await call('POST', '/api/pedidos', { body: { nombre: 'Ana', email: 'a@b.com', retiro: true, items: [{ idProducto: 1, cantidad: 3 }] } });
+  const r = await call('POST', '/api/pedidos', { body: { ...PEDIDO_OK, items: [{ idProducto: 1, cantidad: 3 }] } });
   assert.equal(r.status, 400);
   assert.match(r.data.error, /stock/);
 });
