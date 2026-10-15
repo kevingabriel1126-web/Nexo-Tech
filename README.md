@@ -15,7 +15,7 @@ Tienda online de electrónica con panel de empleados. Proyecto de e-commerce hec
 
 ## Puesta en marcha
 
-1. **Crear la base.** En SSMS ejecutá `sql/01_base_de_datos.sql` (crea la base `EcommerceBanfield`, las tablas, los datos de ejemplo y los procedimientos; **si la base ya existe, la reemplaza**). Después ejecutá `sql/02_usuario_de_la_app.sql`, cambiando antes la contraseña. Si ya tenés la base cargada y solo querés actualizar las descripciones de los productos, ejecutá `sql/03_actualizar_descripciones.sql` (no borra nada; cambiá la línea `USE` si tu base tiene otro nombre). Para agregar los 7 productos nuevos a una base ya cargada, ejecutá `sql/04_agregar_productos.sql`.
+1. **Crear la base.** En SSMS ejecutá `sql/01_base_de_datos.sql` (crea la base `EcommerceBanfield`, las tablas, los datos de ejemplo y los procedimientos; **si la base ya existe, la reemplaza**). Después ejecutá `sql/02_usuario_de_la_app.sql`, cambiando antes la contraseña. Si ya tenés la base cargada y solo querés actualizar las descripciones de los productos, ejecutá `sql/03_actualizar_descripciones.sql` (no borra nada; cambiá la línea `USE` si tu base tiene otro nombre). Para agregar los 7 productos nuevos a una base ya cargada, ejecutá `sql/04_agregar_productos.sql`. Si tu base todavía dice "Smartphone" en los nombres de los productos, ejecutá antes `sql/05_renombrar_smartphone_a_celular.sql`.
 2. **Configurar.** Copiá `.env.example` como `.env` y completá los datos de conexión y `TOKEN_SECRET` (un texto largo y aleatorio).
 3. **Instalar y arrancar.**
 
@@ -38,6 +38,13 @@ Tienda online de electrónica con panel de empleados. Proyecto de e-commerce hec
 
 **Cambialos antes de publicar el sitio.**
 
+## Imágenes de los productos
+
+Se cargan desde el panel: **Iniciar sesión** (dueño o gerente) → pestaña **Productos** → **Editar** en el producto → campo **Imagen** → **Guardar cambios**. Pueden ser PNG, JPG, WEBP o GIF de hasta 300 KB.
+
+- En esta versión con servidor, las imágenes se guardan en la carpeta `uploads/` y su dirección queda en la base de datos. Hacé copias de seguridad de esa carpeta junto con la base.
+- En la versión de demostración (`demo/`) las imágenes quedan guardadas en el navegador de quien las sube.
+
 ## Pruebas
 
 ```bash
@@ -49,7 +56,7 @@ Son 13 pruebas automáticas del servidor (permisos, validaciones, login, errores
 ## Estructura
 
 ```
-sql/       01_base_de_datos.sql, 02_usuario_de_la_app.sql, 03_actualizar_descripciones.sql y 04_agregar_productos.sql (opcionales)
+sql/       01_base_de_datos.sql, 02_usuario_de_la_app.sql, 03_actualizar_descripciones.sql, 04_agregar_productos.sql y 05_renombrar_smartphone_a_celular.sql (opcionales)
 server/    index.js (HTTP y sesión), routes.js (API), auth.js, db.js
 public/    index.html (la tienda y el panel, conectados al servidor)
 demo/      electro-banfield.html (versión de demostración que funciona sola, sin servidor ni base)
