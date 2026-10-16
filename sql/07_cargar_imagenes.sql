@@ -4,6 +4,25 @@
 USE EcommerceBanfield;
 GO
 
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/6.webp' WHERE Nombre = N'Notebook Apple MacBook Air M2 13"';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/8.webp' WHERE Nombre = N'Notebook Gamer ASUS TUF F15';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/9.webp' WHERE Nombre = N'Tablet Samsung Galaxy Tab A9';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/10.webp' WHERE Nombre = N'Tablet Apple iPad 10ma Gen';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/11.webp' WHERE Nombre = N'Tablet Lenovo Tab M10 Plus';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/12.webp' WHERE Nombre = N'Auriculares JBL Tune 510BT';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/13.webp' WHERE Nombre = N'Auriculares Sony WH-1000XM5';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/14.webp' WHERE Nombre = N'Auriculares Apple AirPods Pro 2';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/15.webp' WHERE Nombre = N'Parlante JBL Flip 6';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/16.webp' WHERE Nombre = N'Parlante Sony SRS-XB13';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/17.webp' WHERE Nombre = N'Smartwatch Samsung Galaxy Watch 6';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/18.webp' WHERE Nombre = N'Smartwatch Apple Watch SE';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/19.webp' WHERE Nombre = N'Smartband Xiaomi Mi Band 8';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/20.webp' WHERE Nombre = N'Smart TV Samsung 55" 4K';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/21.webp' WHERE Nombre = N'Smart TV LG 50" 4K UHD';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/22.webp' WHERE Nombre = N'Monitor LG 24" Full HD';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/23.webp' WHERE Nombre = N'Monitor Gamer Samsung 27" 165Hz';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/24.webp' WHERE Nombre = N'Consola Sony PlayStation 5 Slim';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/25.webp' WHERE Nombre = N'Consola Microsoft Xbox Series X';
 UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/26.webp' WHERE Nombre = N'Consola Nintendo Switch OLED';
 UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/27.webp' WHERE Nombre = N'Joystick Sony DualSense PS5';
 UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/28.webp' WHERE Nombre = N'Auriculares Gamer HyperX Cloud II';
