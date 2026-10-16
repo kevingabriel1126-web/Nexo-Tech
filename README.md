@@ -43,7 +43,8 @@ Tienda online de electrónica con panel de empleados. Proyecto de e-commerce hec
 
 Se cargan desde el panel: **Iniciar sesión** (dueño o gerente) → pestaña **Productos** → **Editar** en el producto → campo **Imagen** → **Guardar cambios**. Pueden ser PNG, JPG, WEBP o GIF de hasta 300 KB.
 
-- En esta versión con servidor, las imágenes se guardan en la carpeta `uploads/` y su dirección queda en la base de datos. Hacé copias de seguridad de esa carpeta junto con la base.
+- **Fotos incluidas:** 20 productos ya vienen con su foto, centrada y en formato cuadrado, en `public/img/productos/` (el nombre del archivo es el número del producto). Los otros 25 muestran un ícono hasta que les cargues una foto.
+- En esta versión con servidor, las imágenes subidas desde el panel se guardan en la carpeta `uploads/` y su dirección queda en la base de datos. Hacé copias de seguridad de esa carpeta junto con la base.
 - En la versión de demostración (`demo/`) las imágenes quedan guardadas en el navegador de quien las sube.
 
 ## Pruebas
@@ -57,9 +58,9 @@ Son 14 pruebas automáticas del servidor (permisos, validaciones, login, errores
 ## Estructura
 
 ```
-sql/       01_base_de_datos.sql, 02_usuario_de_la_app.sql, 03_actualizar_descripciones.sql, 04_agregar_productos.sql y 05_renombrar_smartphone_a_celular.sql y 06_agregar_pago_simulado.sql (opcionales)
+sql/       01_base_de_datos.sql, 02_usuario_de_la_app.sql, 03_actualizar_descripciones.sql, 04_agregar_productos.sql y 05_renombrar_smartphone_a_celular.sql, 06_agregar_pago_simulado.sql y 07_cargar_imagenes.sql (opcionales)
 server/    index.js (HTTP y sesión), routes.js (API), auth.js, db.js
-public/    index.html (la tienda y el panel, conectados al servidor)
+public/    index.html (la tienda y el panel, conectados al servidor) y img/productos/ (fotos de los productos)
 demo/      electro-banfield.html (versión de demostración que funciona sola, sin servidor ni base)
 test/      pruebas automáticas del servidor
 docs/      documentación técnica (Word y Markdown) y diagrama de la base de datos
