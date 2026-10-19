@@ -4,6 +4,11 @@
 USE EcommerceBanfield;
 GO
 
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/1.webp' WHERE Nombre = N'Celular Samsung Galaxy S24 128GB';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/2.webp' WHERE Nombre = N'Celular Apple iPhone 15 128GB';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/3.webp' WHERE Nombre = N'Celular Xiaomi Redmi Note 13';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/4.webp' WHERE Nombre = N'Celular Motorola Edge 50';
+UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/5.webp' WHERE Nombre = N'Notebook Lenovo IdeaPad 3 15"';
 UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/6.webp' WHERE Nombre = N'Notebook Apple MacBook Air M2 13"';
 UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/8.webp' WHERE Nombre = N'Notebook Gamer ASUS TUF F15';
 UPDATE dbo.Productos SET ImagenUrl = N'/img/productos/9.webp' WHERE Nombre = N'Tablet Samsung Galaxy Tab A9';
