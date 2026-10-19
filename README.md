@@ -43,7 +43,7 @@ Tienda online de electrónica con panel de empleados. Proyecto de e-commerce hec
 
 Se cargan desde el panel: **Iniciar sesión** (dueño o gerente) → pestaña **Productos** → **Editar** en el producto → campo **Imagen** → **Guardar cambios**. Pueden ser PNG, JPG, WEBP o GIF de hasta 300 KB.
 
-- **Fotos incluidas:** 39 de los 45 productos ya vienen con su foto, centrada y en formato cuadrado, en `public/img/productos/` (el nombre del archivo es el número del producto). Los otros 6 (Samsung S24, iPhone 15, Redmi Note 13, Moto Edge 50, Lenovo IdeaPad 3 y HP Pavilion 15) muestran un ícono hasta que les cargues una foto.
+- **Fotos incluidas:** 44 de los 45 productos ya vienen con su foto, centrada y en formato cuadrado, en `public/img/productos/` (el nombre del archivo es el número del producto). El único sin foto es la HP Pavilion 15, que muestra un ícono hasta que le cargues una foto.
 - En esta versión con servidor, las imágenes subidas desde el panel se guardan en la carpeta `uploads/` y su dirección queda en la base de datos. Hacé copias de seguridad de esa carpeta junto con la base.
 - En la versión de demostración (`demo/`) las imágenes quedan guardadas en el navegador de quien las sube.
 
