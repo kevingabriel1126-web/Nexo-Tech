@@ -63,14 +63,7 @@ server/    index.js (HTTP y sesión), routes.js (API), auth.js, db.js
 public/    index.html (la tienda y el panel, conectados al servidor) y img/productos/ (fotos de los productos)
 demo/      electro-banfield.html (versión de demostración que funciona sola, sin servidor ni base)
 test/      pruebas automáticas del servidor
-docs/      documentación técnica (Word y Markdown) y diagrama de la base de datos
-docs/marca/ logo e isologo de Nexo Tech
 ```
-
-## Documentación
-
-- [Documentación técnica](docs/documentacion-tecnica.md) (también en `docs/documentacion-tecnica.docx`)
-- Diagrama de la base de datos: `docs/er.png` (se regenera con `docs/generar_diagrama.py`)
 
 ## Ramas
 
@@ -81,7 +74,6 @@ docs/marca/ logo e isologo de Nexo Tech
 | `feature/base-de-datos` | Tablas, vistas, procedimientos y datos de ejemplo. |
 | `feature/servidor-api` | Servidor Node.js, API, sesiones y permisos. |
 | `feature/tienda-web` | La tienda, el panel de empleados y la versión de demostración. |
-| `docs/documentacion` | Documentación y diagrama. |
 
 Flujo de trabajo: se crea una rama `feature/...` desde `develop`, se trabaja ahí, se integra en `develop` y, cuando está probado, `develop` se integra en `main`.
 
