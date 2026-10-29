@@ -81,4 +81,3 @@ Flujo de trabajo: se crea una rama `feature/...` desde `develop`, se trabaja ah�
 
 - El script SQL no se probó en un SQL Server real durante el desarrollo: la primera ejecución hay que revisarla.
 - El pago es una simulación (no hay pasarela real), no hay emails automáticos, stock por versión ni recuperación de contraseña.
-- 
